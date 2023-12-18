@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7cd96b739397d94eb69e81b33702003, type: 3}
+  m_Name: T_Shotgun
+  m_EditorClassIdentifier: 
+  maxHP: 35
+  DMG: 6
+  maxAmmo: 40
+  maxBattery: 50
+  range: 20
+  attackSpeed: 0.75
+  projectile: {fileID: 8900725887460578008, guid: d38beb21aaa4c9e47991573a6d90fa41, type: 3}
+  SE_GengeratePjtor: {fileID: 0}
+  SE_Fire: {fileID: 0}
+  followTargetSpeed: 0
+  followCurrentTarget: 0
+  pellets: 12
+  fireRandomly: 0
+  spread: 30
+  equidistant: 0
+  fireRounds: 1
+  fireRate: 0
+  projectileSpeed_min: 40
+  projectileSpeed_max: 50
+  infinitePenetration: 0
+  penetration: 0
+  projectileDuration: 0.5
