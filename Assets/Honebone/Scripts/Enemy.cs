@@ -47,6 +47,8 @@ public class Enemy : MonoBehaviour
     Transform targetTransform;
     Vector2 targetDiff;
 
+    [SerializeField]
+    GameObject damageText;
     EnemySpawner enemySpawner;
 
     SpriteRenderer sprite;
@@ -69,6 +71,8 @@ public class Enemy : MonoBehaviour
     public void Damage(int DMG,Transform attackerTF)
     {
         status.HP -= DMG;
+        var t = Instantiate(damageText, transform.position, Quaternion.identity);
+        t.GetComponent<DamageText>().Init(DMG);
         if (status.HP <= 0)
         {
             status.dead = true;

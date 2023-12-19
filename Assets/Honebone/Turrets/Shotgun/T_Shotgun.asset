@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: T_Shotgun
   m_EditorClassIdentifier: 
   maxHP: 35
-  DMG: 6
-  maxAmmo: 40
+  DMG: 8
+  maxAmmo: 30
   maxBattery: 50
   range: 20
   attackSpeed: 0.75
@@ -25,7 +25,7 @@ MonoBehaviour:
   followCurrentTarget: 0
   pellets: 12
   fireRandomly: 0
-  spread: 30
+  spread: 40
   equidistant: 0
   fireRounds: 1
   fireRate: 0
