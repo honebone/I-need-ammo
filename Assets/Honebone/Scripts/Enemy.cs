@@ -20,8 +20,8 @@ public class Enemy : MonoBehaviour
         public float range_mul;
         public float range;
 
-        public float fireRate_mul;
-        public float fireRate;
+        public float attackSpeed_mul;
+        public float attackSpeed;
 
         public bool dead;
         public int HP;
@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
             DMG = data.DMG;
             speed = data.speed;
             range = data.range;
-            fireRate = data.fireRate;
+            attackSpeed = data.attackSpeed;
 
             HP = maxHP;
         }
@@ -43,6 +43,7 @@ public class Enemy : MonoBehaviour
     EnemyData test;
     EnemyStatus status;
 
+    Transform baseTF;
     bool targetingTurret;
     Transform targetTransform;
     Vector2 targetDiff;
@@ -53,6 +54,8 @@ public class Enemy : MonoBehaviour
 
     SpriteRenderer sprite;
     bool flipped;
+    float timer_attack;
+    bool readyAttack;
     public void Init(EnemyData data)
     {
         status = new EnemyStatus();
@@ -66,7 +69,11 @@ public class Enemy : MonoBehaviour
         Init(test);
         //targetTransform = targetTurret.transform;
     }
-    public void SetBaseTF(Transform baseTF) { targetTransform = baseTF; }
+    public void SetBaseTF(Transform b)
+    {
+        baseTF = b;
+        targetTransform = baseTF;
+    }
 
     public void Damage(int DMG,Transform attackerTF)
     {
@@ -93,7 +100,24 @@ public class Enemy : MonoBehaviour
     }
     void Update()
     {
-        //if (targetTurret == null || !targetTurret.CheckAlive()) { SetTarget(); }
+        timer_attack += Time.deltaTime;
+        if (timer_attack >= (1f / status.attackSpeed)) { readyAttack = true; }
+        if (targetDiff.magnitude <= status.range && readyAttack&&CheckAlive())
+        {
+            readyAttack = false;
+            timer_attack = 0;
+            if (!status.enemyData.rangedAttack)//近接攻撃をするなら、直接攻撃
+            {
+                if (targetingTurret)//タレットをターゲット中なら
+                {
+                    targetTransform.GetComponent<Turret>().Damage(status.DMG);
+                }
+            }
+            else
+            {
+
+            }
+        }
     }
     //public void SetTarget()
     //{
@@ -135,11 +159,17 @@ public class Enemy : MonoBehaviour
             //}
         }
 
-
+        if (targetingTurret && !targetTransform.GetComponent<Turret>().CheckAlive())//ターゲット中のタレットが破壊されたら、ターゲットをベースに戻す
+        {
+            targetingTurret = false;
+            targetTransform = baseTF;
+        }
         if (CheckAlive()&&targetDiff.magnitude>status.range)
         {
+            //rb.velocity = targetDiff.normalized * status.speed;
             transform.Translate(targetDiff.normalized * status.speed / 50f);
         }
+       
     }
     public bool CheckAlive() { return !status.dead; }
 }

@@ -8,4 +8,9 @@ public static class Extensions
     {
         return hit.collider != null && hit.collider.CompareTag(tagName);
     }
+    public static Vector2 UnitCircle(this float angle)
+    {
+        float rad = angle * Mathf.Deg2Rad;
+        return new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+    }
 }

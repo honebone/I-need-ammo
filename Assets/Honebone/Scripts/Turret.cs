@@ -54,7 +54,10 @@ public class Turret : MonoBehaviour
     [SerializeField]
     TurretStatusUI statusUI;
 
+    [SerializeField]
+    GameObject damageText;
     EnemySpawner enemySpawner;
+    SoundManager soundManager;
 
     float timer_attack;
     bool readyFire;
@@ -69,17 +72,18 @@ public class Turret : MonoBehaviour
     {
         Init(test);
         enemySpawner = FindObjectOfType<EnemySpawner>();
+        soundManager = FindObjectOfType<SoundManager>();
     }
     void Update()
     {
-        if (target == null || !target.CheckAlive()) { SetTarget(); }
-        Vector2 origin = transform.position;//originに自身の座標を代入
-        Vector2 direction = new Vector2(1, 0);//directionに自身からプレイヤーに向かう単位ベクトルを代入
-        Debug.DrawRay(origin, direction * status.range, Color.red);//Rayと同じ始点、方向、長さの赤い線を1フレーム描画
+        if (target == null || !target.CheckAlive()) { SetTarget(); }//ターゲットがいないか、今のターゲットが死んでいるとき、新たにターゲットを設定
+        Vector2 origin = transform.position;
+        Vector2 direction = new Vector2(1, 0);
+        Debug.DrawRay(origin, direction * status.range, Color.red);
 
         timer_attack += Time.deltaTime;
         if (timer_attack >= (1f / status.attackSpeed)) { readyFire = true; }
-        if (target != null && readyFire)
+        if (target != null && readyFire && CheckFunctional())
         {
             readyFire = false;
             timer_attack = 0;
@@ -87,7 +91,7 @@ public class Turret : MonoBehaviour
         }
 
         timer_battery += Time.deltaTime;
-        if (timer_battery >= 1f)
+        if (timer_battery >= 1f)//バッテリーの消費
         {
             timer_battery -= 1f;
             ConsumeBattery(1);
@@ -105,21 +109,40 @@ public class Turret : MonoBehaviour
             StartCoroutine(Fire());
         }
     }
+    public void Damage(int DMG)
+    {
+        status.HP -= DMG;
+        var t = Instantiate(damageText, transform.position, Quaternion.identity);
+        statusUI.SetSliderValue();
+        t.GetComponent<DamageText>().Init(DMG);
+        if (status.HP <= 0)
+        {
+            status.dead = true;
+
+            GetComponent<Collider2D>().enabled = false;
+            GetComponent<SpriteRenderer>().enabled = false;
+        }
+    }
     IEnumerator Fire()
     {
         var wait = new WaitForSeconds(status.turretData.fireRate);
-        //if (status.SE_GengeratePjtor != null) { soundManager.PlayAudio(status.SE_GengeratePjtor); }
-        //if (data.fireRate == 0 && status.SE_Fire != null) { soundManager.PlayAudio(status.SE_Fire); }
+        if (status.turretData.SE_GengeratePjtor != null) { soundManager.PlaySE(transform.position, status.turretData.SE_GengeratePjtor); }
 
         for (int i = 0; i < status.turretData.fireRounds; i++)
         {
-            FireProjectile();
-            ConsumeAmmo();
-            if (status.turretData.fireRate > 0) { yield return wait; }
+            if (CheckFunctional())
+            {
+                FireProjectile();
+                ConsumeAmmo();
+                if (status.turretData.fireRate > 0) { yield return wait; }
+            }
+            else { break; }
         }
     }
     public void FireProjectile()
     {
+        if (status.turretData.SE_Fire != null) { soundManager.PlaySE(transform.position, status.turretData.SE_Fire); }
+
         Vector3 dir = new Vector3();
         dir = (target.transform.position - transform.position).normalized;
         Quaternion quaternion = Quaternion.FromToRotation(Vector3.up, dir);
@@ -141,6 +164,48 @@ public class Turret : MonoBehaviour
         }
 
     }
+    public int SupplyAmmo(int quantity)
+    {
+        int delta = status.maxAmmo - status.ammo;
+        if (delta >= quantity)
+        {
+            status.ammo += quantity;
+            return 0;
+        }
+        else
+        {
+            status.ammo=status.maxAmmo;
+            return quantity - delta;
+        }
+    }
+    public int SupplyBattery(int quantity)
+    {
+        int delta = status.maxBattery - status.battery;
+        if (delta >= quantity)
+        {
+            status.battery += quantity;
+            return 0;
+        }
+        else
+        {
+            status.battery = status.maxBattery;
+            return quantity - delta;
+        }
+    }
+    public int Repair(int quantity)
+    {
+        int delta = status.maxHP - status.HP;
+        if (delta >= quantity)
+        {
+            status.HP += quantity;
+            return 0;
+        }
+        else
+        {
+            status.HP = status.maxHP;
+            return quantity - delta;
+        }
+    }
     void ConsumeAmmo()
     {
         status.ammo -= 1;
@@ -156,4 +221,8 @@ public class Turret : MonoBehaviour
 
     public Turret.TurretStatus GetTurretStatus() { return status; }
     public bool CheckAlive() { return !status.dead; }
+    public bool CheckFunctional()
+    {
+        return !status.dead && status.ammo > 0 && status.battery > 0;
+    }
 }

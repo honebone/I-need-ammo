@@ -185,6 +185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   test: {fileID: 11400000, guid: ac85e705e34690440a94988ff645a5b2, type: 2}
   statusUI: {fileID: 439083484717801689}
+  damageText: {fileID: 5375455229568154527, guid: 242531f060801874f9654bf3653da581, type: 3}
 --- !u!61 &7937893192490473361
 BoxCollider2D:
   m_ObjectHideFlags: 0

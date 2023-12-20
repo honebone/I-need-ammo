@@ -9,14 +9,40 @@ public class CameraController : MonoBehaviour
     int horizontalKey;
     int verticalKey;
     float speedMod;
+    float wheel;
     // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    private void FixedUpdate()
+    //private void FixedUpdate()
+    //{
+    //    if (Input.GetKey(KeyCode.D)) { horizontalKey = 1; }//‰¡ˆÚ“®‚ÌŒŸo 
+    //    else if (Input.GetKey(KeyCode.A)) { horizontalKey = -1; }
+    //    else { horizontalKey = 0; }
+
+    //    if (Input.GetKey(KeyCode.W)) { verticalKey = 1; }//cˆÚ“®‚ÌŒŸo
+    //    else if (Input.GetKey(KeyCode.S)) { verticalKey = -1; }
+    //    else { verticalKey = 0; }
+
+    //    if (horizontalKey != 0 && verticalKey != 0) { speedMod = 1 / Mathf.Sqrt(2); }
+    //    else { speedMod = 1f; }
+    //    if (Input.GetKey(KeyCode.LeftShift)) { speedMod *= 3; }//Shift‚Å‚‘¬ˆÚ“®
+
+    //    transform.Translate(moveSpeed * speedMod * new Vector2(horizontalKey, verticalKey));//ˆÚ“®
+
+        
+    //}
+    private void Update()
     {
+        wheel += Input.mouseScrollDelta.y;
+        if (wheel != 0)
+        {
+            Camera.main.orthographicSize -= 1* wheel;
+            wheel = 0;
+        }
+
         if (Input.GetKey(KeyCode.D)) { horizontalKey = 1; }//‰¡ˆÚ“®‚ÌŒŸo 
         else if (Input.GetKey(KeyCode.A)) { horizontalKey = -1; }
         else { horizontalKey = 0; }
@@ -27,8 +53,9 @@ public class CameraController : MonoBehaviour
 
         if (horizontalKey != 0 && verticalKey != 0) { speedMod = 1 / Mathf.Sqrt(2); }
         else { speedMod = 1f; }
-        if (Input.GetKey(KeyCode.LeftShift)) { speedMod *= 3; }
+        if (Input.GetKey(KeyCode.LeftShift)) { speedMod *= 3; }//Shift‚Å‚‘¬ˆÚ“®
 
-        transform.Translate(moveSpeed * speedMod * new Vector2(horizontalKey, verticalKey));//ˆÚ“®
+        transform.Translate(Time.unscaledDeltaTime * moveSpeed * speedMod * new Vector2(horizontalKey, verticalKey));//ˆÚ“®
     }
+    
 }

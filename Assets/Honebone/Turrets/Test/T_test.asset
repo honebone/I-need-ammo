@@ -12,20 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7cd96b739397d94eb69e81b33702003, type: 3}
   m_Name: T_test
   m_EditorClassIdentifier: 
-  maxHP: 20
-  DMG: 5
+  maxHP: 100
+  DMG: 4
   maxAmmo: 300
   maxBattery: 60
   range: 40
-  attackSpeed: 5
+  attackSpeed: 10
   projectile: {fileID: 8900725887460578008, guid: d38beb21aaa4c9e47991573a6d90fa41, type: 3}
   SE_GengeratePjtor: {fileID: 0}
-  SE_Fire: {fileID: 0}
+  SE_Fire: {fileID: 8300000, guid: 49cc7c5a1f499184bbce7c53e940c570, type: 3}
   followTargetSpeed: 0
   followCurrentTarget: 0
   pellets: 1
   fireRandomly: 0
-  spread: 7
+  spread: 10
   equidistant: 0
   fireRounds: 1
   fireRate: 0

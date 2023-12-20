@@ -9,13 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1da9756cacc93f54d9b5bab0eb3b4278, type: 3}
-  m_Name: E_test
+  m_Script: {fileID: 11500000, guid: 59471330bb75560439df06245204ab8b, type: 3}
+  m_Name: D_test
   m_EditorClassIdentifier: 
-  obj: {fileID: 1547793791223846747, guid: 309cf0fb275d01e43b26ff0a186d1056, type: 3}
-  maxHP: 30
-  DMG: 5
-  speed: 5
-  range: 3
-  attackSpeed: 1
-  rangedAttack: 0
+  obj: {fileID: 2222251233619875763, guid: 2e567cbc4bdad0440a9ab27c8abb3534, type: 3}
+  moveSpeed: 3

@@ -82,7 +82,7 @@ public class TurretProjectile : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            if (!hitEnemies.Contains(collision.GetInstanceID()))
+            if (hitCount<= turretData.penetration && !hitEnemies.Contains(collision.GetInstanceID()))
             {
                 hitCount++;
                 hitEnemies.Add(collision.GetInstanceID());

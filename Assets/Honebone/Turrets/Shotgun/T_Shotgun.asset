@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7cd96b739397d94eb69e81b33702003, type: 3}
   m_Name: T_Shotgun
   m_EditorClassIdentifier: 
-  maxHP: 35
+  maxHP: 150
   DMG: 8
   maxAmmo: 30
   maxBattery: 50
@@ -20,7 +20,7 @@ MonoBehaviour:
   attackSpeed: 0.75
   projectile: {fileID: 8900725887460578008, guid: d38beb21aaa4c9e47991573a6d90fa41, type: 3}
   SE_GengeratePjtor: {fileID: 0}
-  SE_Fire: {fileID: 0}
+  SE_Fire: {fileID: 8300000, guid: 5006f7886815b134bb81d0e88e340300, type: 3}
   followTargetSpeed: 0
   followCurrentTarget: 0
   pellets: 12
