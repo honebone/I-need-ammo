@@ -60,7 +60,7 @@ public class Drone : MonoBehaviour
         }
         else if (returning)
         {
-            //‹AŠÒ•ñ
+            baseTF.GetComponent<Base>().ReturnDrone(status);
             Destroy(gameObject);
         }
 
