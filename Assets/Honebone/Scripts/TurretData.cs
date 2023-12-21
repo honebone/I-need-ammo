@@ -5,8 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "T_", menuName = "ScriptableObjects/TurretData")]
 public class TurretData : ScriptableObject
 {
+    public GameObject obj;
+    public string turretName;
+    public Sprite turretImage;
+
     public int maxHP;
     public int DMG;
+    public ItemData ammoData;
     public int maxAmmo;
     public int maxBattery;
     public float range;

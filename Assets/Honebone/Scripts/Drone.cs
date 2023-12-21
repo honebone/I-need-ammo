@@ -12,12 +12,52 @@ public class Drone : MonoBehaviour
         public float moveSpeed;
 
         public List<Turret> targets;
+        public List<DroneOrder> orders;
         public bool[] checkList;
+        public bool occupied;
+        public Vector2 pos;
 
         public void Init(DroneData data)
         {
             droneData = data;
             moveSpeed=data.moveSpeed;
+            orders = new List<DroneOrder>();
+        }
+        public int CountItemSlots()
+        {
+            int count = 0;
+            foreach(DroneOrder order in orders)
+            {
+                count += order.supplyItems.Count;
+            }
+            return count;
+        }
+        public bool CheckOrders()
+        {
+            if(orders.Count == 0) { return false; }
+            foreach(DroneOrder order in orders)
+            {
+                if (!order.Check(droneData.itemCap)) { return false; }
+            }
+            return true;
+        }
+    }
+    public class DroneOrder
+    {
+        public Turret.TurretStatus target;
+        public List<ItemData> supplyItems;
+        public int GetItemStack(ItemData data)
+        {
+            int stack = 0;
+            foreach(ItemData item in supplyItems)
+            {
+                if (data.itemName == item.itemName) { stack++; }
+            }
+           return stack;
+        }
+        public bool Check(int itemCap)
+        {
+            return target != null && !target.dead && supplyItems.Count > 0 && supplyItems.Count <= itemCap;
         }
     }
     [SerializeField]
@@ -32,13 +72,13 @@ public class Drone : MonoBehaviour
     bool supplying;
     bool returning;
     float timer;
-    public void Init(DroneData data,List<Turret> targets,Transform b)
+    public void Init(DroneStatus droneStatus,List<Turret> targets,Transform b)
     {
-        status = new DroneStatus();
-        status.Init(data);
+        status = droneStatus;
         //sprite = GetComponent<SpriteRenderer>();
         targetDiff = new Vector2();
         status.targets = new List<Turret>(targets);
+        //status.orders = new List<DroneOrder>();
         status.checkList = new bool[targets.Count];
         targetIndex = 0;
         targetTransform = status.targets[targetIndex].transform;
@@ -52,6 +92,7 @@ public class Drone : MonoBehaviour
         if (targetDiff.magnitude > 3f)
         {
             transform.Translate(targetDiff.normalized * status.moveSpeed / 50f);
+            status.pos=transform.position;
         }
         else if (!returning && !supplying && !status.checkList[targetIndex])
         {
@@ -67,18 +108,29 @@ public class Drone : MonoBehaviour
 
         if (supplying)
         {
-            timer += Time.deltaTime;
-            statusUI.Progress(Time.deltaTime);
-            if (timer >= 5f)
+            if(status.targets[targetIndex] == null || !status.targets[targetIndex].CheckAlive())
             {
-                timer = 0f;
+                timer = 0;
                 supplying = false;
-                status.checkList[targetIndex] = true;
-                Supply();
-                statusUI.EndSupply();
-
                 targetIndex++;
+                statusUI.EndSupply();
                 SetTarget();
+            }
+            else
+            {
+                timer += Time.deltaTime;
+                statusUI.Progress(Time.deltaTime);
+                if (timer >= 5f)
+                {
+                    timer = 0f;
+                    supplying = false;
+                    status.checkList[targetIndex] = true;
+                    Supply();
+                    statusUI.EndSupply();
+
+                    targetIndex++;
+                    SetTarget();
+                }
             }
         }
     }

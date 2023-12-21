@@ -57,5 +57,9 @@ public class CameraController : MonoBehaviour
 
         transform.Translate(Time.unscaledDeltaTime * moveSpeed * speedMod * new Vector2(horizontalKey, verticalKey));//ˆÚ“®
     }
-    
+    public void MoveTo(Vector2 pos)
+    {
+        Vector3 newPos = new Vector3(pos.x, pos.y, -10);
+        transform.position = newPos;
+    }
 }

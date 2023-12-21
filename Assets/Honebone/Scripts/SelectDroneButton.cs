@@ -9,7 +9,11 @@ public class SelectDroneButton : MonoBehaviour
     [SerializeField]
     Image icon;
     [SerializeField]
+    Image background;
+    [SerializeField]
     Text text;
+    [SerializeField]
+    Image selected;
 
     DronesUI dronesUI;
    public void Init(Drone.DroneStatus s,DronesUI d)
@@ -18,9 +22,15 @@ public class SelectDroneButton : MonoBehaviour
         icon.sprite = status.droneData.droneImage;
         text.text = status.droneData.droneName;
         dronesUI = d;
+        if (status.occupied) { background.color = Color.red; }
     }
     public void Select()
     {
-        dronesUI.SelectDrone(status);
+        if (!status.occupied) { dronesUI.SelectDrone(status); }//test
+        else { FindObjectOfType<CameraController>().MoveTo(status.pos); }
+        dronesUI.ResetDroneButtonsSelected();
+        selected.enabled = true;
     }
+    public void ResetSelected() { selected.enabled = false; }
+
 }

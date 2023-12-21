@@ -10,10 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7cd96b739397d94eb69e81b33702003, type: 3}
-  m_Name: T_test
+  m_Name: T_machinegun
   m_EditorClassIdentifier: 
+  obj: {fileID: 4082590059901746876, guid: 63f1a21b358e26343a7c608a52ce1408, type: 3}
+  turretName: "\u30DE\u30B7\u30F3\u30AC\u30F3\u30BF\u30EC\u30C3\u30C8"
+  turretImage: {fileID: 21300000, guid: f8dd0212b0efe7648adba47b7c92be35, type: 3}
   maxHP: 100
   DMG: 4
+  ammoData: {fileID: 11400000, guid: b0f9890f00d4e3a48a50e6bc26599301, type: 2}
   maxAmmo: 300
   maxBattery: 60
   range: 40

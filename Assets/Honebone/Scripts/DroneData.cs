@@ -9,5 +9,6 @@ public class DroneData : ScriptableObject
     public string droneName;
     public Sprite droneImage;
 
+    public int itemCap;
     public int moveSpeed;
 }

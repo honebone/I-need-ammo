@@ -24,8 +24,8 @@ public class DebugFunctions : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                var d = Instantiate(test_drone.obj, transform.position, Quaternion.identity);
-                d.GetComponent<Drone>().Init(test_drone, turrets, baseTF);
+                //var d = Instantiate(test_drone.obj, transform.position, Quaternion.identity);
+                //d.GetComponent<Drone>().Init(test_drone, turrets, baseTF);
             }
         }
     }

@@ -23,7 +23,6 @@ public class TurretStatusUI : MonoBehaviour
         ammoBar.value = status.ammo;
         batteryBar.maxValue = status.maxBattery;
         batteryBar.value = status.battery;
-
     }
 
     public void SetSliderValue()
