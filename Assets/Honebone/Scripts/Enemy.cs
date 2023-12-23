@@ -38,9 +38,17 @@ public class Enemy : MonoBehaviour
 
             HP = maxHP;
         }
+        public string GetInfo()
+        {
+            string s = "";
+            s += string.Format("[{0}]\n\n", enemyData.enemyName);
+            s += string.Format("HP：{0}/{1}\n\n", HP, maxHP);
+            s += string.Format("DMG：{0}\n", DMG);
+            s += string.Format("攻撃速度：毎秒{0}回\n", attackSpeed);
+
+            return s;
+        }
     }
-    [SerializeField]
-    EnemyData test;
     EnemyStatus status;
 
     Transform baseTF;
@@ -50,30 +58,31 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     GameObject damageText;
+    [SerializeField]
+    GameObject blood;
+    [SerializeField]
+    EnemyStatusUI statusUI;
     EnemySpawner enemySpawner;
+    InfoUI infoUI;
 
     SpriteRenderer sprite;
     bool flipped;
     float timer_attack;
     bool readyAttack;
-    public void Init(EnemyData data)
+    public void Init(Transform b,InfoUI info,EnemyData enemyData)
     {
+        baseTF = b;
+        infoUI = info;
+        targetTransform = baseTF;
+
         status = new EnemyStatus();
-        status.Init(data);
+        status.Init(enemyData);
         sprite = GetComponent<SpriteRenderer>();
         enemySpawner = FindObjectOfType<EnemySpawner>();//test
         targetDiff = new Vector2();
-    }
-    private void Start()
-    {
-        Init(test);
-        //targetTransform = targetTurret.transform;
-    }
-    public void SetBaseTF(Transform b)
-    {
-        baseTF = b;
-        targetTransform = baseTF;
-    }
+
+        statusUI.Init(this, infoUI);
+    }    
 
     public void Damage(int DMG,Transform attackerTF)
     {
@@ -84,10 +93,13 @@ public class Enemy : MonoBehaviour
         {
             status.dead = true;
 
+            for(int i = 0; i < 3; i++) { Bleed(); }
+
             GetComponent<Collider2D>().enabled = false;
             GetComponent<SpriteRenderer>().enabled = false;
 
             enemySpawner.RemoveEnemyTF(transform);
+            Destroy(gameObject, 5f);
         }
         else
         {
@@ -97,6 +109,15 @@ public class Enemy : MonoBehaviour
                 targetTransform = attackerTF;
             }
         }
+        if (33f.Probability()) { Bleed(); }
+       
+    }
+    void Bleed()
+    {
+        Vector2 bloodPos = transform.position;
+        bloodPos.y -= 2;
+        bloodPos.x += Random.Range(-2f, 2f);
+        Instantiate(blood, bloodPos, Quaternion.identity);
     }
     void Update()
     {
@@ -115,23 +136,20 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-
+                FireProjectile();
             }
         }
     }
-    //public void SetTarget()
-    //{
-    //    Vector2 origin = transform.position;//originに自身の座標を代入
-    //    Vector2 direction = new Vector2(1, 0);//directionに自身からプレイヤーに向かう単位ベクトルを代入
-    //    RaycastHit2D hit2D = Physics2D.CircleCast(origin, status.range, direction);
-    //    Debug.DrawRay(origin, direction * status.range, Color.red);//Rayと同じ始点、方向、長さの赤い線を1フレーム描画
-    //    if (hit2D.CheckRaycastHit("Turret"))
-    //    {
-    //        targetTurret = hit2D.collider.GetComponent<Turret>();
-    //        print("ok");
-    //        StartCoroutine(Interval());
-    //    }
-    //}
+    public void FireProjectile()
+    {
+        //if (status.enemyData.SE_Fire != null) { soundManager.PlaySE(transform.position, status.turretData.SE_Fire); }
+
+        Vector3 dir = (targetTransform.transform.position - transform.position).normalized;
+        Quaternion quaternion = Quaternion.FromToRotation(Vector3.up, dir);
+       
+        var pjtl = Instantiate(status.enemyData.projectile, transform.position, quaternion);
+        pjtl.GetComponent<EnemyProjectile>().Init(this);
+    }
     void FixedUpdate()
     {
         targetDiff = targetTransform.position - transform.position;
@@ -172,4 +190,5 @@ public class Enemy : MonoBehaviour
        
     }
     public bool CheckAlive() { return !status.dead; }
+    public EnemyStatus GetEnemyStatus() { return status; }
 }

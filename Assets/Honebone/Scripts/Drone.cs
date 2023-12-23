@@ -11,7 +11,6 @@ public class Drone : MonoBehaviour
         public float moveSpeed_mul;
         public float moveSpeed;
 
-        public List<Turret> targets;
         public List<DroneOrder> orders;
         public bool[] checkList;
         public bool occupied;
@@ -68,21 +67,23 @@ public class Drone : MonoBehaviour
     Transform targetTransform;
     Vector2 targetDiff;
 
+    LogUI logUI;
+
     int targetIndex;
     bool supplying;
     bool returning;
     float timer;
-    public void Init(DroneStatus droneStatus,List<Turret> targets,Transform b)
+    public void Init(DroneStatus droneStatus,Transform b)
     {
         status = droneStatus;
         //sprite = GetComponent<SpriteRenderer>();
         targetDiff = new Vector2();
-        status.targets = new List<Turret>(targets);
         //status.orders = new List<DroneOrder>();
-        status.checkList = new bool[targets.Count];
+        status.checkList = new bool[status.orders.Count];
         targetIndex = 0;
-        targetTransform = status.targets[targetIndex].transform;
+        targetTransform = status.orders[targetIndex].target.turret.transform;
         baseTF = b;
+        logUI = FindObjectOfType<LogUI>();
     }
     private void FixedUpdate()
     {
@@ -108,7 +109,7 @@ public class Drone : MonoBehaviour
 
         if (supplying)
         {
-            if(status.targets[targetIndex] == null || !status.targets[targetIndex].CheckAlive())
+            if(status.orders[targetIndex] == null || !status.orders[targetIndex].target.turret.CheckAlive())
             {
                 timer = 0;
                 supplying = false;
@@ -136,23 +137,39 @@ public class Drone : MonoBehaviour
     }
     void SetTarget()
     {
-        if (targetIndex >= status.targets.Count)//全てtのターゲットに補給完了したらベースに帰る
+        if (targetIndex >= status.orders.Count)//全てtのターゲットに補給完了したらベースに帰る
         {
             returning = true;
             targetTransform = baseTF;
         }
-        else if (status.targets[targetIndex] == null || !status.targets[targetIndex].CheckAlive())//ターゲット中のタレットが破壊されたら、次のターゲットに
+        else if (status.orders[targetIndex] == null || !status.orders[targetIndex].target.turret.CheckAlive())//ターゲット中のタレットが破壊されたら、次のターゲットに
         {
             targetIndex++;
-            targetTransform = status.targets[targetIndex].transform;
+            targetTransform = status.orders[targetIndex].target.turret.transform;
         }
-        else { targetTransform = status.targets[targetIndex].transform; }
+        else { targetTransform = status.orders[targetIndex].target.turret.transform; }
         targetDiff = targetTransform.position - transform.position;
     }
     void Supply()
     {
-        status.targets[targetIndex].SupplyAmmo(100);
-        status.targets[targetIndex].SupplyBattery(20);
-        status.targets[targetIndex].Repair(10);
+        logUI.AddLog(string.Format("<<{0}に物資を補充>>", status.orders[targetIndex].target.turretData.turretName));
+        foreach (ItemData item in status.orders[targetIndex].supplyItems)
+        {
+            switch (item.itemTag)
+            {
+                case ItemData.ItemTag.repair:
+                    status.orders[targetIndex].target.turret.Repair(item.quantityPerStack);
+                    logUI.AddLog(string.Format("・タレットを{0}修理",item.quantityPerStack));
+                    break;
+                case ItemData.ItemTag.ammo:
+                    status.orders[targetIndex].target.turret.SupplyAmmo(item.quantityPerStack);
+                    logUI.AddLog(string.Format("・弾薬を{0}補充", item.quantityPerStack));
+                    break;
+                case ItemData.ItemTag.battery:
+                    status.orders[targetIndex].target.turret.SupplyBattery(item.quantityPerStack);
+                    logUI.AddLog(string.Format("・バッテリーを{0}充電", item.quantityPerStack));
+                    break;
+            }
+        }
     }
 }

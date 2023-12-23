@@ -48,5 +48,6 @@ public class SelectItemButton : MonoBehaviour
         stackText.text = string.Format("{0}スタック", order.GetItemStack(item));
         dronesUI.SetItemSlotsText();
         dronesUI.CheckDeployable();
+        dronesUI.SetSupplyIcons();
     }
 }

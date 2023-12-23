@@ -19,7 +19,7 @@ MonoBehaviour:
   DMG: 8
   ammoData: {fileID: 11400000, guid: de18c55cfba9a0941918457cd0877217, type: 2}
   maxAmmo: 30
-  maxBattery: 50
+  maxBattery: 100
   range: 20
   attackSpeed: 0.75
   projectile: {fileID: 8900725887460578008, guid: d38beb21aaa4c9e47991573a6d90fa41, type: 3}

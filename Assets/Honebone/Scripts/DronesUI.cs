@@ -120,13 +120,12 @@ public class DronesUI : MonoBehaviour
     public void SetOrderButtons()
     {
         ResetOrderButtons();
-        foreach (Drone.DroneOrder order in selectedDrone.orders)
-        {
+        for(int i = 0;i< selectedDrone.orders.Count; i++) { 
             var b = Instantiate(orderButton, orderButtonP);
-            b.GetComponent<OrderButton>().Init(order, this,selectedOrder==order);
+            b.GetComponent<OrderButton>().Init(selectedDrone.orders[i], this,selectedOrder== selectedDrone.orders[i],i);
         }
         var n = Instantiate(newOrderButton, orderButtonP);
-        n.GetComponent<OrderButton>().Init(null, this,false);
+        n.GetComponent<OrderButton>().Init(null, this, false, -999);
     }
     public void ResetOrderButtons()
     {
@@ -146,6 +145,13 @@ public class DronesUI : MonoBehaviour
 
         CheckDeployable();
         SetTurretButtons();
+    }
+    public void SetSupplyIcons()
+    {
+        foreach (OrderButton button in orderButtonP.GetComponentsInChildren<OrderButton>())
+        {
+            button.SetSupplyIcons();
+        }
     }
     //===============================================================<<タレット選択>>============================================================
     public void SetTurretButtons()
@@ -214,7 +220,21 @@ public class DronesUI : MonoBehaviour
     {
         if (deployable)
         {
+            deployable = false;
             @base.SendDrone(selectedDrone);
+
+            ResetDroneButtonsSelected();
+            ResetOrderButtons();
+            ResetTurretButtons();
+            ResetItemButtons();
+
+            selectedDrone = new Drone.DroneStatus();
+            selectedOrder = new Drone.DroneOrder();
+            selectedTurret = new Turret.TurretStatus();
+
+            f = false;
+            anim.SetInteger("phase", 0);
+            anim.SetTrigger("close");
         }
     }
 }

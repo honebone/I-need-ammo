@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class Base : MonoBehaviour
 {
-    [SerializeField]
     List<Turret> turrets;
+    [SerializeField]
+    Transform turretsP;
 
     [SerializeField]
     List<DroneData> dronesData;
     List<Drone.DroneStatus> drones; 
 
     DronesUI dronesUI;
+    LogUI logUI;
     void Start()
     {
         dronesUI = FindObjectOfType<DronesUI>();
+        logUI = FindObjectOfType<LogUI>();
+        turrets = new List<Turret>(turretsP.GetComponentsInChildren<Turret>());
         drones = new List<Drone.DroneStatus>();
         foreach(DroneData data in dronesData)
         {
@@ -29,12 +33,13 @@ public class Base : MonoBehaviour
     public void ReturnDrone(Drone.DroneStatus s)
     {
         s.occupied = false;
+        s.orders = new List<Drone.DroneOrder>();
         dronesUI.SetDroneButtons(drones);
     }
     public void SendDrone(Drone.DroneStatus s)
     {
         var d = Instantiate(s.droneData.obj, transform.position, Quaternion.identity);
-        d.GetComponent<Drone>().Init(s, turrets, transform);
+        d.GetComponent<Drone>().Init(s, transform);
 
         s.occupied = true;
         //bool f = false;
@@ -48,6 +53,12 @@ public class Base : MonoBehaviour
         //}
         //if (!f) { print("error"); }
         dronesUI.SetDroneButtons(drones);
+    }
+    public void DeployTurret(TurretData turret,Vector2 pos)
+    {
+        var t = Instantiate(turret.obj, pos, Quaternion.identity, turretsP);
+        t.GetComponent<Turret>().Init(turret);
+        logUI.AddLog(string.Format("タレットを追加：{0}", turret.turretName));
     }
     public List<Turret.TurretStatus> GetTurretsStatus()
     {

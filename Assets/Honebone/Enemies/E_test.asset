@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: E_test
   m_EditorClassIdentifier: 
   obj: {fileID: 1547793791223846747, guid: 309cf0fb275d01e43b26ff0a186d1056, type: 3}
+  enemyName: "\u30A6\u30A9\u30FC\u30AB\u30FC"
   maxHP: 30
   DMG: 5
   speed: 5

@@ -16,4 +16,4 @@ MonoBehaviour:
   droneName: test
   droneImage: {fileID: 21300000, guid: f8dd0212b0efe7648adba47b7c92be35, type: 3}
   itemCap: 4
-  moveSpeed: 3
+  moveSpeed: 5

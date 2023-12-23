@@ -31,6 +31,7 @@ public class Turret : MonoBehaviour
         public int shield;
         public int ammo;
         public int battery;
+        public Turret turret;
 
         public void Init(TurretData data)
         {
@@ -45,6 +46,18 @@ public class Turret : MonoBehaviour
             HP = maxHP;
             ammo = maxAmmo;
             battery = maxBattery;
+        }
+        public string GetInfo()
+        {
+            string s = "";
+            s += string.Format("[{0}]\n\n", turretData.turretName);
+            s += string.Format("バッテリー：{0}/{1}\n", battery,maxBattery);
+            s += string.Format("弾薬：{0}/{1}\n", ammo,maxAmmo);
+            s += string.Format("HP：{0}/{1}\n\n", HP,maxHP);
+            s += string.Format("DMG：{0}\n", DMG);
+            s += string.Format("攻撃速度：毎秒{0}回\n", attackSpeed);
+
+            return s;
         }
     }
     [SerializeField]
@@ -66,6 +79,7 @@ public class Turret : MonoBehaviour
     {
         status = new TurretStatus();
         status.Init(data);
+        status.turret = this;
         statusUI.Init(this);
     }
     private void Start()
@@ -164,47 +178,44 @@ public class Turret : MonoBehaviour
         }
 
     }
-    public int SupplyAmmo(int quantity)
+    public void SupplyAmmo(int quantity)
     {
         int delta = status.maxAmmo - status.ammo;
         if (delta >= quantity)
         {
             status.ammo += quantity;
-            return 0;
         }
         else
         {
             status.ammo=status.maxAmmo;
-            return quantity - delta;
         }
+        statusUI.SetSliderValue();
     }
-    public int SupplyBattery(int quantity)
+    public void SupplyBattery(int quantity)
     {
         int delta = status.maxBattery - status.battery;
         if (delta >= quantity)
         {
             status.battery += quantity;
-            return 0;
         }
         else
         {
             status.battery = status.maxBattery;
-            return quantity - delta;
         }
+        statusUI.SetSliderValue();
     }
-    public int Repair(int quantity)
+    public void Repair(int quantity)
     {
         int delta = status.maxHP - status.HP;
         if (delta >= quantity)
         {
             status.HP += quantity;
-            return 0;
         }
         else
         {
             status.HP = status.maxHP;
-            return quantity - delta;
         }
+        statusUI.SetSliderValue();
     }
     void ConsumeAmmo()
     {

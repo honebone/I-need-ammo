@@ -6,12 +6,6 @@ public class DebugFunctions : MonoBehaviour
 {
    [SerializeField]
    bool debug = true;
-    [SerializeField]
-    DroneData test_drone;
-    [SerializeField]
-    List<Turret> turrets;
-    [SerializeField]
-    Transform baseTF;
     void Start()
     {
         
@@ -24,8 +18,7 @@ public class DebugFunctions : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                //var d = Instantiate(test_drone.obj, transform.position, Quaternion.identity);
-                //d.GetComponent<Drone>().Init(test_drone, turrets, baseTF);
+                FindObjectOfType<GameManager>().StartGame();
             }
         }
     }

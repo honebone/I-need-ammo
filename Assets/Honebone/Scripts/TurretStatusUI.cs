@@ -13,9 +13,11 @@ public class TurretStatusUI : MonoBehaviour
     Slider batteryBar;
 
     Turret.TurretStatus status;
+    InfoUI infoUI;
     public void Init(Turret turret)
     {
         status = turret.GetTurretStatus();
+        infoUI = FindObjectOfType<InfoUI>();
 
         HPBar.maxValue = status.maxHP;
         HPBar.value = status.HP;
@@ -32,5 +34,20 @@ public class TurretStatusUI : MonoBehaviour
         batteryBar.value = status.battery;
 
     }
-  
+
+    bool f;
+    private void Update()
+    {
+        if (f) { infoUI.SetText(status.GetInfo()); }
+    }
+    public void OnMouseEnter()
+    {
+        f = true;
+    }
+    public void OnMouseExit()
+    {
+        f = false;
+        infoUI.ResetText();
+    }
+
 }
