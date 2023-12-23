@@ -14,6 +14,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     Text remainingText;
     GameManager gameManager;
+    ScoreManager scoreManager;
 
     List<Enemy> spawnedEnemy;
     List<Transform> enemiesTF;
@@ -28,6 +29,7 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         gameManager=FindObjectOfType<GameManager>();
+        scoreManager = FindObjectOfType<ScoreManager>();
         spawnedEnemy = new List<Enemy>(GetComponentsInChildren<Enemy>());//test
         enemiesTF = new List<Transform>();
         //foreach(Enemy enemy in spawnedEnemy)//test
@@ -46,25 +48,26 @@ public class EnemySpawner : MonoBehaviour
             if (timer >= 1f / wave.spawnSpeed)
             {
                 timer -= 1f / wave.spawnSpeed;
-                if (remaining.Count > 0)
+
+                for (int i = 0; i < wave.spawnAmount; i++)
                 {
-                    for(int i = 0; i < wave.spawnAmount; i++)
+                    index = remaining.ChoiceWithWeight();
+                    SpawnEnemy(enemies[index].enemy);
+                    if (remaining[index] > 0) { remaining[index]--; }
+
+                    bool f = true;
+                    foreach (int j in remaining)
                     {
-                        index = remaining.ChoiceWithWeight();
-                        SpawnEnemy(enemies[index].enemy);
-                        if (remaining[index] <= 1) { remaining.RemoveAt(index); }
-                        else { remaining[index]--; }
+                        if (j > 0) { f = false; }
                     }
-                   
-                }
-               
-                if (remaining.Count == 0)
-                {
-                    waving = false;
+                    if (f)
+                    {
+                        waving = false;
+                        break;
+                    }
                 }
             }
         }
-        
     }
     public void StartWave(WaveData w)
     {
@@ -78,11 +81,11 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemy(EnemyData data)
     {
-        float radius = Random.Range(wave.radius*0.8f, wave.radius*1.2f);
+        float radius = Random.Range(wave.radius * 0.8f, wave.radius * 1.2f);
         float angle = Random.Range(-wave.spread / 2f, wave.spread / 2f);
         Vector2 spawnPos = angle.UnitCircle() * radius;
         var e = Instantiate(data.obj, spawnPos, Quaternion.identity, transform);
-        e.GetComponent<Enemy>().Init(baseTF,infoUI, data);
+        e.GetComponent<Enemy>().Init(baseTF,infoUI, data,scoreManager);
         enemiesTF.Add(e.GetComponent<Transform>());
     }
     public void RemoveEnemyTF(Transform tf)

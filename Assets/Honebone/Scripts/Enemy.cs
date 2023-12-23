@@ -45,6 +45,10 @@ public class Enemy : MonoBehaviour
             s += string.Format("HP：{0}/{1}\n\n", HP, maxHP);
             s += string.Format("DMG：{0}\n", DMG);
             s += string.Format("攻撃速度：毎秒{0}回\n", attackSpeed);
+            if (enemyData.charger)
+            {
+                s += "<突撃>\nタレットに攻撃されてもベースを狙い続ける";
+            }
 
             return s;
         }
@@ -64,16 +68,18 @@ public class Enemy : MonoBehaviour
     EnemyStatusUI statusUI;
     EnemySpawner enemySpawner;
     InfoUI infoUI;
+    ScoreManager scoreManager;
 
     SpriteRenderer sprite;
     bool flipped;
     float timer_attack;
     bool readyAttack;
-    public void Init(Transform b,InfoUI info,EnemyData enemyData)
+    public void Init(Transform b,InfoUI info,EnemyData enemyData,ScoreManager score)
     {
         baseTF = b;
         infoUI = info;
         targetTransform = baseTF;
+        scoreManager = score;
 
         status = new EnemyStatus();
         status.Init(enemyData);
@@ -86,31 +92,35 @@ public class Enemy : MonoBehaviour
 
     public void Damage(int DMG,Transform attackerTF)
     {
-        status.HP -= DMG;
-        var t = Instantiate(damageText, transform.position, Quaternion.identity);
-        t.GetComponent<DamageText>().Init(DMG);
-        if (status.HP <= 0)
+        if (CheckAlive())
         {
-            status.dead = true;
-
-            for(int i = 0; i < 3; i++) { Bleed(); }
-
-            GetComponent<Collider2D>().enabled = false;
-            GetComponent<SpriteRenderer>().enabled = false;
-
-            enemySpawner.RemoveEnemyTF(transform);
-            Destroy(gameObject, 5f);
-        }
-        else
-        {
-            if (!targetingTurret && (attackerTF.position - transform.position).magnitude <= targetDiff.magnitude)//ベースをターゲットしていて、攻撃してきたタレットの方がベースより近かったら
+            status.HP -= DMG;
+            var t = Instantiate(damageText, transform.position, Quaternion.identity);
+            t.GetComponent<DamageText>().Init(DMG);
+            if (status.HP <= 0)
             {
-                targetingTurret = true;
-                targetTransform = attackerTF;
+                status.dead = true;
+
+                for (int i = 0; i < 3; i++) { Bleed(); }
+
+                GetComponent<Collider2D>().enabled = false;
+                GetComponent<SpriteRenderer>().enabled = false;
+
+                enemySpawner.RemoveEnemyTF(transform);
+                //scoreManager.AddScore(1, "");
+
+                Destroy(gameObject, 5f);
             }
+            else
+            {
+                if (!status.enemyData.charger&&!targetingTurret && (attackerTF.position - transform.position).magnitude <= targetDiff.magnitude)//ベースをターゲットしていて、攻撃してきたタレットの方がベースより近かったら
+                {
+                    targetingTurret = true;
+                    targetTransform = attackerTF;
+                }
+            }
+            if (33f.Probability()) { Bleed(); }
         }
-        if (33f.Probability()) { Bleed(); }
-       
     }
     void Bleed()
     {

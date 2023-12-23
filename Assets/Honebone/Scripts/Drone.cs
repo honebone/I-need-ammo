@@ -68,6 +68,7 @@ public class Drone : MonoBehaviour
     Vector2 targetDiff;
 
     LogUI logUI;
+    ScoreManager scoreManager;
 
     int targetIndex;
     bool supplying;
@@ -84,6 +85,7 @@ public class Drone : MonoBehaviour
         targetTransform = status.orders[targetIndex].target.turret.transform;
         baseTF = b;
         logUI = FindObjectOfType<LogUI>();
+        scoreManager = FindObjectOfType<ScoreManager>();
     }
     private void FixedUpdate()
     {
@@ -152,24 +154,35 @@ public class Drone : MonoBehaviour
     }
     void Supply()
     {
-        logUI.AddLog(string.Format("<<{0}に物資を補充>>", status.orders[targetIndex].target.turretData.turretName));
+        logUI.AddLog(string.Format("<<{0}に物資を補給>>", status.orders[targetIndex].target.turretData.turretName));
+        int baseScore = FindObjectOfType<GameManager>().GetBaseScore();
+        bool f = false;
+
+        int suppliedAmount = status.orders[targetIndex].supplyItems.Count;
+        scoreManager.AddScore(baseScore * 0.1f * suppliedAmount, string.Format("{0}つのアイテムを補給", suppliedAmount), true);
         foreach (ItemData item in status.orders[targetIndex].supplyItems)
         {
             switch (item.itemTag)
             {
                 case ItemData.ItemTag.repair:
-                    status.orders[targetIndex].target.turret.Repair(item.quantityPerStack);
-                    logUI.AddLog(string.Format("・タレットを{0}修理",item.quantityPerStack));
+                    f = status.orders[targetIndex].target.turret.Repair(item.quantityPerStack);
+                    logUI.AddLog(string.Format("・タレットを{0}修理", item.quantityPerStack));
                     break;
                 case ItemData.ItemTag.ammo:
-                    status.orders[targetIndex].target.turret.SupplyAmmo(item.quantityPerStack);
+                    f = status.orders[targetIndex].target.turret.SupplyAmmo(item.quantityPerStack);
                     logUI.AddLog(string.Format("・弾薬を{0}補充", item.quantityPerStack));
                     break;
                 case ItemData.ItemTag.battery:
-                    status.orders[targetIndex].target.turret.SupplyBattery(item.quantityPerStack);
+                    f = status.orders[targetIndex].target.turret.SupplyBattery(item.quantityPerStack);
                     logUI.AddLog(string.Format("・バッテリーを{0}充電", item.quantityPerStack));
                     break;
             }
+            if (f)
+            {
+                scoreManager.AddScore(baseScore * 0.4f, "物資ロスなし!", true);
+            }
+            f = false;
         }
+        
     }
 }

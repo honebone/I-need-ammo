@@ -15,10 +15,26 @@ public class PauseUI : MonoBehaviour
     [SerializeField]
     GameManager gameManager;
 
+    bool paused;
+    bool f;
     public void TogglePause()
     {
         gameManager.TogglePause();
-        if (image.sprite == pause) { image.sprite = resume; }
-        else { image.sprite = pause; }
+        if (!paused)
+        {
+            f = true;
+            paused = true;
+            image.sprite = resume;
+        }
+        else
+        {
+            paused = false;
+            image.sprite = pause;
+        }
+    }
+    public bool CheckPaused() { return f; }
+    public void RestFrag()
+    {
+        f = false;
     }
 }

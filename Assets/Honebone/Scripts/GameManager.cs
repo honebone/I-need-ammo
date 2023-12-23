@@ -24,18 +24,21 @@ public class GameManager : MonoBehaviour
     EnemySpawner enemySpawner;
     [SerializeField]
     WaveText waveText;
-    [SerializeField]
-    Transform tuuretsP;
-    [SerializeField]
     LogUI logUI;
     Base @base;
+    ScoreManager scoreManager;
+    PauseUI pauseUI;
 
     int waveCount;
     WaveData curretWave;
+    float waveScoref;
     // Start is called before the first frame update
     void Start()
     {
         @base = FindObjectOfType<Base>();
+        logUI = FindObjectOfType<LogUI>();
+        scoreManager = FindObjectOfType<ScoreManager>();
+        pauseUI = FindObjectOfType<PauseUI>();
     }
 
     // Update is called once per frame
@@ -50,6 +53,23 @@ public class GameManager : MonoBehaviour
     }
     public void EndWave()
     {
+        logUI.AddLog("ウェーブクリア!");
+
+        int baseScore = curretWave.GetBaseScore();
+        float bonus = 0;
+        scoreManager.AddScore(baseScore, "ウェーブクリア",true);
+
+        if (@base.GetTurretsAmount() > 0)
+        {
+            bonus = baseScore * 0.05f * @base.GetTurretsAmount();
+            scoreManager.AddScore(bonus, string.Format("タレット生存ボーナス {0}％", @base.GetTurretsAmount() * 5),false);
+        }
+
+        if (!pauseUI.CheckPaused())
+        {
+            scoreManager.AddScore(baseScore * 0.5f, "ノンストップボーナス 50％", false);
+        }
+
         foreach (TurretReward reward in curretWave.turretRewards)
         {
             @base.DeployTurret(reward.turret, reward.pos);
@@ -58,12 +78,14 @@ public class GameManager : MonoBehaviour
     }
     public void NextWave(WaveData w)
     {
+        waveScoref = 0;
         curretWave = w;
         waveCount++;
         waveText.SetText(waveCount);
     }
     public void StartWave()
     {
+        pauseUI.RestFrag();
         enemySpawner.StartWave(curretWave);
     }
     public void TogglePause()
@@ -71,4 +93,6 @@ public class GameManager : MonoBehaviour
         if (Time.timeScale == 1) { Time.timeScale = 0; }
         else { Time.timeScale = 1; }
     }
+
+    public int GetBaseScore() { return curretWave.GetBaseScore(); }
 }

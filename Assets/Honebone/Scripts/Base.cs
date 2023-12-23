@@ -69,4 +69,5 @@ public class Base : MonoBehaviour
         }
         return ts;
     }
+    public int GetTurretsAmount() { return turrets.Count; }
 }

@@ -178,7 +178,7 @@ public class Turret : MonoBehaviour
         }
 
     }
-    public void SupplyAmmo(int quantity)
+    public bool SupplyAmmo(int quantity)
     {
         int delta = status.maxAmmo - status.ammo;
         if (delta >= quantity)
@@ -190,8 +190,9 @@ public class Turret : MonoBehaviour
             status.ammo=status.maxAmmo;
         }
         statusUI.SetSliderValue();
+        return delta >= quantity;
     }
-    public void SupplyBattery(int quantity)
+    public bool SupplyBattery(int quantity)
     {
         int delta = status.maxBattery - status.battery;
         if (delta >= quantity)
@@ -203,8 +204,9 @@ public class Turret : MonoBehaviour
             status.battery = status.maxBattery;
         }
         statusUI.SetSliderValue();
+        return delta >= quantity;
     }
-    public void Repair(int quantity)
+    public bool Repair(int quantity)
     {
         int delta = status.maxHP - status.HP;
         if (delta >= quantity)
@@ -216,6 +218,7 @@ public class Turret : MonoBehaviour
             status.HP = status.maxHP;
         }
         statusUI.SetSliderValue();
+        return delta >= quantity;
     }
     void ConsumeAmmo()
     {
