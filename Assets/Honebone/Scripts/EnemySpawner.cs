@@ -15,6 +15,7 @@ public class EnemySpawner : MonoBehaviour
     Text remainingText;
     GameManager gameManager;
     ScoreManager scoreManager;
+    SoundManager soundManager;
 
     List<Enemy> spawnedEnemy;
     List<Transform> enemiesTF;
@@ -30,6 +31,7 @@ public class EnemySpawner : MonoBehaviour
     {
         gameManager=FindObjectOfType<GameManager>();
         scoreManager = FindObjectOfType<ScoreManager>();
+        soundManager = FindObjectOfType<SoundManager>();
         spawnedEnemy = new List<Enemy>(GetComponentsInChildren<Enemy>());//test
         enemiesTF = new List<Transform>();
         //foreach(Enemy enemy in spawnedEnemy)//test
@@ -85,7 +87,7 @@ public class EnemySpawner : MonoBehaviour
         float angle = Random.Range(-wave.spread / 2f, wave.spread / 2f);
         Vector2 spawnPos = angle.UnitCircle() * radius;
         var e = Instantiate(data.obj, spawnPos, Quaternion.identity, transform);
-        e.GetComponent<Enemy>().Init(baseTF,infoUI, data,scoreManager);
+        e.GetComponent<Enemy>().Init(baseTF,infoUI, data,scoreManager,soundManager);
         enemiesTF.Add(e.GetComponent<Transform>());
     }
     public void RemoveEnemyTF(Transform tf)

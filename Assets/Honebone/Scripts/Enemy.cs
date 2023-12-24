@@ -45,11 +45,10 @@ public class Enemy : MonoBehaviour
             s += string.Format("HP：{0}/{1}\n\n", HP, maxHP);
             s += string.Format("DMG：{0}\n", DMG);
             s += string.Format("攻撃速度：毎秒{0}回\n", attackSpeed);
-            if (enemyData.charger)
-            {
-                s += "<突撃>\nタレットに攻撃されてもベースを狙い続ける";
-            }
-
+            if (enemyData.charger) { s += "<<突撃>>\nタレットに攻撃されてもベースを狙い続ける\n"; }
+            if (enemyData.explode) { s += "<<自爆>>\n攻撃時に自滅し、大ダメージを与える\n"; }
+            if (enemyData.rangedAttack) { s += "<<マークスマン>>\n遠距離から攻撃する\n"; }
+            
             return s;
         }
     }
@@ -65,21 +64,27 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     GameObject blood;
     [SerializeField]
+    AudioClip[] hitSE;
+    [SerializeField]
+    AudioClip dieSE;
+    [SerializeField]
     EnemyStatusUI statusUI;
     EnemySpawner enemySpawner;
     InfoUI infoUI;
     ScoreManager scoreManager;
+    SoundManager soundManager;
 
     SpriteRenderer sprite;
     bool flipped;
     float timer_attack;
     bool readyAttack;
-    public void Init(Transform b,InfoUI info,EnemyData enemyData,ScoreManager score)
+    public void Init(Transform b,InfoUI info,EnemyData enemyData,ScoreManager score,SoundManager sound)
     {
         baseTF = b;
         infoUI = info;
         targetTransform = baseTF;
         scoreManager = score;
+        soundManager = sound;
 
         status = new EnemyStatus();
         status.Init(enemyData);
@@ -101,15 +106,7 @@ public class Enemy : MonoBehaviour
             {
                 status.dead = true;
 
-                for (int i = 0; i < 3; i++) { Bleed(); }
-
-                GetComponent<Collider2D>().enabled = false;
-                GetComponent<SpriteRenderer>().enabled = false;
-
-                enemySpawner.RemoveEnemyTF(transform);
-                //scoreManager.AddScore(1, "");
-
-                Destroy(gameObject, 5f);
+                Die();
             }
             else
             {
@@ -120,7 +117,21 @@ public class Enemy : MonoBehaviour
                 }
             }
             if (33f.Probability()) { Bleed(); }
+            soundManager.PlaySE(transform.position,hitSE[Random.Range(0, hitSE.Length)]);
         }
+    }
+    void Die()
+    {
+        for (int i = 0; i < 3; i++) { Bleed(); }
+
+        GetComponent<Collider2D>().enabled = false;
+        GetComponent<SpriteRenderer>().enabled = false;
+
+        enemySpawner.RemoveEnemyTF(transform);
+        //scoreManager.AddScore(1, "");
+
+        soundManager.PlaySE(transform.position, dieSE);
+        Destroy(gameObject, 5f);
     }
     void Bleed()
     {
@@ -147,6 +158,11 @@ public class Enemy : MonoBehaviour
             else
             {
                 FireProjectile();
+            }
+            if (status.enemyData.explode)
+            {
+                status.dead = true;
+                Die();
             }
         }
     }

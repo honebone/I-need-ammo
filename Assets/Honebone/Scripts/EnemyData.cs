@@ -16,6 +16,7 @@ public class EnemyData : ScriptableObject
     public float attackSpeed;
     [Space(25)]
     public bool charger;
+    public bool explode;
     [Space(25)]
     [Header("’e‚ğ”ò‚Î‚µ‚Ä‰“‹——£UŒ‚‚ğ‚·‚é‚©")] public bool rangedAttack;
 

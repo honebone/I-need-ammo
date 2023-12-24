@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: I_Ammo_Machinegun
   m_EditorClassIdentifier: 
   itemName: "\u30DE\u30B7\u30F3\u30AC\u30F3\u30A2\u30E2"
+  itemInfo: "\u30DE\u30B7\u30F3\u30AC\u30F3\u30BF\u30EC\u30C3\u30C8\u7528\u306E\u5F3E\u85AC"
   itemImage: {fileID: 21300000, guid: 343ffc7e243c24546bdf5a7f7e587074, type: 3}
   itemTag: 1
   quantityPerStack: 250
+  obj: {fileID: 0}

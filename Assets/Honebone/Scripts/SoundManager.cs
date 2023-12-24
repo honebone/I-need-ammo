@@ -6,9 +6,20 @@ public class SoundManager : MonoBehaviour
 {
     [SerializeField]
     GameObject speaker;
-    public void PlaySE(Vector2 pos,AudioClip SE)
+
+    List<AudioClip> playedSE;
+     public void PlaySE(Vector2 pos,AudioClip SE)
     {
-        var s = Instantiate(speaker, pos, Quaternion.identity, transform);
-        s.GetComponent<Speaker>().Init(SE);
+        if (!playedSE.Contains(SE))
+        {
+            playedSE.Add(SE);
+            var s = Instantiate(speaker, pos, Quaternion.identity, transform);
+            s.GetComponent<Speaker>().Init(SE);
+        }
+        
+    }
+    private void FixedUpdate()
+    {
+        playedSE = new List<AudioClip>();
     }
 }

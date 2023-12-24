@@ -26,3 +26,5 @@ MonoBehaviour:
   - enemy: {fileID: 11400000, guid: c49ae68d172a0bf4b9b60fd418df95c6, type: 2}
     amount: 5
   turretRewards: []
+  droneRewards: []
+  upgradeRewards: 3

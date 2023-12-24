@@ -39,7 +39,7 @@ public class CameraController : MonoBehaviour
         wheel += Input.mouseScrollDelta.y;
         if (wheel != 0)
         {
-            Camera.main.orthographicSize -= 1* wheel;
+            Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize -= 2 * wheel, 5, 80);
             wheel = 0;
         }
 

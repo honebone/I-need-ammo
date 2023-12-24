@@ -30,8 +30,8 @@ public class TurretData : ScriptableObject
     [Header("+-(spread/2)°のブレが生じる")] public float spread;
     [Header("spread上に等間隔に発射するか")] public bool equidistant;
 
-    [Header("発射回数")] public float fireRounds = 1;
-    [Header("発射回数が2以上の時に参照 1発発射するごとのインターバル[s] 0なら同時発射")] public float fireRate;
+    //[Header("発射回数")] public float fireRounds = 1;
+    //[Header("発射回数が2以上の時に参照 1発発射するごとのインターバル[s] 0なら同時発射")] public float fireRate;
 
     [Header("min～maxの間でランダムに決まる")]
     public float projectileSpeed_min = 100f;

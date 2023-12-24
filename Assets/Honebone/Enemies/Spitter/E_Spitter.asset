@@ -14,13 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obj: {fileID: 5167883693589549423, guid: ef4c40a1d9cd3014a9d06cebddeb142a, type: 3}
   enemyName: "\u30B9\u30D4\u30C3\u30BF\u30FC"
-  maxHP: 20
+  maxHP: 15
   DMG: 5
   speed: 5
   range: 30
   attackSpeed: 0.5
+  charger: 0
+  explode: 0
   rangedAttack: 1
   projectile: {fileID: 7389844098459618275, guid: fae282b03d0d10949b946bd618b2c65b, type: 3}
   SE_Fire: {fileID: 0}
-  projectileSpeed: 50
-  projectileDuration: 3
+  projectileSpeed: 25
+  projectileDuration: 6

@@ -31,6 +31,14 @@ public class Turret : MonoBehaviour
         public int shield;
         public int ammo;
         public int battery;
+
+        public int killCount;
+        public int dealtDMG;
+
+        public float doubletap;
+        public int generator;
+
+        public List<UpgradeModule> upgrades;
         public Turret turret;
 
         public void Init(TurretData data)
@@ -46,6 +54,26 @@ public class Turret : MonoBehaviour
             HP = maxHP;
             ammo = maxAmmo;
             battery = maxBattery;
+            upgrades = new List<UpgradeModule>();
+        }
+        public void LevelUpUpgrade(ItemData upgrade)
+        {
+            foreach (UpgradeModule upgradeModule in upgrades)
+            {
+                if (upgradeModule.GetItemData() == upgrade)
+                {
+                    upgradeModule.LevelUp();
+                    return;
+                }
+            }
+        }
+        public int GetUpgradeLevel(ItemData upgrade)
+        {
+            foreach(UpgradeModule upgradeModule in upgrades)
+            {
+                if (upgradeModule.GetItemData() == upgrade) { return upgradeModule.GetLevel(); }
+            }
+            return 0;
         }
         public string GetInfo()
         {
@@ -56,6 +84,12 @@ public class Turret : MonoBehaviour
             s += string.Format("HP：{0}/{1}\n\n", HP,maxHP);
             s += string.Format("DMG：{0}\n", DMG);
             s += string.Format("攻撃速度：毎秒{0}回\n", attackSpeed);
+            s += string.Format("累計与ダメージ：{0}\n", dealtDMG);
+            s += string.Format("キル数：{0}\n", killCount);
+            foreach (UpgradeModule upgradeModule in upgrades)
+            {
+                s += upgradeModule.GetInfo() + "\n";
+            }
 
             return s;
         }
@@ -66,6 +100,8 @@ public class Turret : MonoBehaviour
     Enemy target;
     [SerializeField]
     TurretStatusUI statusUI;
+    [SerializeField]
+    Transform upgradeP;
 
     [SerializeField]
     GameObject damageText;
@@ -139,18 +175,22 @@ public class Turret : MonoBehaviour
     }
     IEnumerator Fire()
     {
-        var wait = new WaitForSeconds(status.turretData.fireRate);
         if (status.turretData.SE_GengeratePjtor != null) { soundManager.PlaySE(transform.position, status.turretData.SE_GengeratePjtor); }
 
-        for (int i = 0; i < status.turretData.fireRounds; i++)
+        if (CheckFunctional())
         {
-            if (CheckFunctional())
+            FireProjectile();
+            ConsumeAmmo();
+        }
+        if (status.doubletap.Probability())
+        {
+            yield return new WaitForSeconds(0.1f);
+            if (CheckFunctional()&&target != null || target.CheckAlive())
             {
                 FireProjectile();
-                ConsumeAmmo();
-                if (status.turretData.fireRate > 0) { yield return wait; }
+                var t = Instantiate(damageText, transform.position, Quaternion.identity);
+                t.GetComponent<DamageText>().Init_Message("ダブルタップ!", Color.yellow);
             }
-            else { break; }
         }
     }
     public void FireProjectile()
@@ -160,7 +200,7 @@ public class Turret : MonoBehaviour
         Vector3 dir = new Vector3();
         dir = (target.transform.position - transform.position).normalized;
         Quaternion quaternion = Quaternion.FromToRotation(Vector3.up, dir);
-        float delta = status.turretData.spread / -2f; ;
+        float delta = status.turretData.spread / -2f; 
         for (int i = 0; i < status.turretData.pellets; i++)
         {
             float spread = 0f;
@@ -233,6 +273,62 @@ public class Turret : MonoBehaviour
         statusUI.SetSliderValue();
     }
 
+    //===============================================================================<<アップグレード関連>>=========================================
+   public void Upgrade(ItemData upgrade)
+    {
+        switch (status.GetUpgradeLevel(upgrade))
+        {
+            case 0:
+                var u = Instantiate(upgrade.obj, upgradeP);
+                u.GetComponent<UpgradeModule>().Init(this);
+                status.upgrades.Add(u.GetComponent<UpgradeModule>());
+                break;
+            case 5:
+                break;
+            default:
+                status.LevelUpUpgrade(upgrade);
+                break;
+        }
+        
+    }
+    
+    public void AddDMG_mul(float value)
+    {
+        status.DMG_mul += value;
+        status.DMG = Mathf.RoundToInt(status.turretData.DMG * (100 + status.DMG_mul) / 100f);
+    }
+    public void AddMaxHP_mul(float value)
+    {
+        status.maxHP_mul += value;
+        int i = Mathf.RoundToInt(status.maxHP * value);
+        status.maxHP = Mathf.RoundToInt(status.turretData.maxHP * (100 + status.maxHP_mul) / 100f);
+        status.HP = Mathf.Min(status.maxHP, status.HP + i);
+        statusUI.SetSliderValue();
+    }
+    public void AddMaxAmmo_mul(float value)
+    {
+        status.maxAmmo_mul += value;
+        int i = Mathf.RoundToInt(status.maxAmmo * value);
+        status.maxAmmo = Mathf.RoundToInt(status.turretData.maxAmmo * (100 + status.maxAmmo_mul) / 100f);
+        status.ammo = Mathf.Min(status.maxAmmo, status.ammo + i);
+        statusUI.SetSliderValue();
+    }
+    public void AddMaxBattery_mul(float value)
+    {
+        status.maxBattery_mul += value;
+        int i = Mathf.RoundToInt(status.maxBattery * value);
+        status.maxBattery = Mathf.RoundToInt(status.turretData.maxBattery * (100 + status.maxBattery_mul) / 100f);
+        status.battery = Mathf.Min(status.maxBattery, status.battery + i);
+        statusUI.SetSliderValue();
+    }
+    public void AddDoubleTap(float value)
+    {
+        status.doubletap += value;
+    }
+    public void AddGenerator(int value)
+    {
+        status.generator += value;
+    }
     public Turret.TurretStatus GetTurretStatus() { return status; }
     public bool CheckAlive() { return !status.dead; }
     public bool CheckFunctional()

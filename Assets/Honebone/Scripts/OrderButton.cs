@@ -18,6 +18,8 @@ public class OrderButton : MonoBehaviour
     [SerializeField]
     GameObject supplyItemIcon;
     [SerializeField]
+    GameObject supplyUpgradeIcon;
+    [SerializeField]
     Transform supplyItemP;
 
     DronesUI dronesUI;
@@ -46,8 +48,16 @@ public class OrderButton : MonoBehaviour
             for (int i = 0; i < supplyItemP.childCount; i++) { Destroy(supplyItemP.GetChild(i).gameObject); }
             foreach (ItemData item in order.supplyItems)
             {
-                var b = Instantiate(supplyItemIcon, supplyItemP);
-                b.GetComponent<SupplyItemIcon>().Init(item.itemImage);
+                if (item.itemTag == ItemData.ItemTag.upgrade)
+                {
+                    var b = Instantiate(supplyUpgradeIcon, supplyItemP);
+                    b.GetComponent<SupplyItemIcon>().Init(item.itemImage);
+                }
+                else
+                {
+                    var b = Instantiate(supplyItemIcon, supplyItemP);
+                    b.GetComponent<SupplyItemIcon>().Init(item.itemImage);
+                }
             }
         }
     }

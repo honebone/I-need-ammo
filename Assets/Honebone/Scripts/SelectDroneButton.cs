@@ -16,6 +16,7 @@ public class SelectDroneButton : MonoBehaviour
     Image selected;
 
     DronesUI dronesUI;
+    InfoUI infoUI;
    public void Init(Drone.DroneStatus s,DronesUI d)
     {
         status = s;
@@ -23,6 +24,7 @@ public class SelectDroneButton : MonoBehaviour
         text.text = status.droneData.droneName;
         dronesUI = d;
         if (status.occupied) { background.color = Color.red; }
+        infoUI = FindObjectOfType<InfoUI>();
     }
     public void Select()
     {
@@ -32,5 +34,23 @@ public class SelectDroneButton : MonoBehaviour
         selected.enabled = true;
     }
     public void ResetSelected() { selected.enabled = false; }
+
+    bool p;
+    private void Update()
+    {
+        if (p)
+        {
+            infoUI.SetText(status.droneData.GetInfo());
+        }
+    }
+    public void OnMouseEnter()
+    {
+        p = true;
+    }
+    public void OnMouseExit()
+    {
+        p = false;
+        infoUI.ResetText();
+    }
 
 }

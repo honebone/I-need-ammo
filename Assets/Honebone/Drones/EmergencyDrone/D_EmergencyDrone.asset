@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59471330bb75560439df06245204ab8b, type: 3}
+  m_Name: D_EmergencyDrone
+  m_EditorClassIdentifier: 
+  obj: {fileID: 7133358333774381437, guid: 173e7dc638e2e8f44bdecad416d10aa7, type: 3}
+  droneName: "\u30A8\u30DE\u30FC\u30B8\u30A7\u30F3\u30B7\u30FC\u30C9\u30ED\u30FC\u30F3"
+  droneImage: {fileID: 21300000, guid: d2e087a0ca382e04b9717f1271a85925, type: 3}
+  itemCap: 2
+  moveSpeed: 8

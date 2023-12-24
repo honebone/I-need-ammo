@@ -144,12 +144,21 @@ public class Drone : MonoBehaviour
             returning = true;
             targetTransform = baseTF;
         }
-        else if (status.orders[targetIndex] == null || !status.orders[targetIndex].target.turret.CheckAlive())//ターゲット中のタレットが破壊されたら、次のターゲットに
+
+        else
         {
-            targetIndex++;
-            targetTransform = status.orders[targetIndex].target.turret.transform;
+            if (status.orders[targetIndex] == null || !status.orders[targetIndex].target.turret.CheckAlive())//ターゲット中のタレットが破壊されたら、次のターゲットに
+            {
+                targetIndex++;
+            }
+
+            if (targetIndex >= status.orders.Count)//全てtのターゲットに補給完了したらベースに帰る
+            {
+                returning = true;
+                targetTransform = baseTF;
+            }
+            else { targetTransform = status.orders[targetIndex].target.turret.transform; }
         }
-        else { targetTransform = status.orders[targetIndex].target.turret.transform; }
         targetDiff = targetTransform.position - transform.position;
     }
     void Supply()
@@ -175,6 +184,10 @@ public class Drone : MonoBehaviour
                 case ItemData.ItemTag.battery:
                     f = status.orders[targetIndex].target.turret.SupplyBattery(item.quantityPerStack);
                     logUI.AddLog(string.Format("・バッテリーを{0}充電", item.quantityPerStack));
+                    break;
+                case ItemData.ItemTag.upgrade:
+                   status.orders[targetIndex].target.turret.Upgrade(item);
+                    logUI.AddLog(string.Format("・{0}を装着", item.itemName));
                     break;
             }
             if (f)

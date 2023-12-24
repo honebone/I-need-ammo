@@ -17,7 +17,7 @@ public class LogText : MonoBehaviour
     private void Update()
     {
         timer += Time.unscaledDeltaTime;
-        if (timer > 3)
+        if (timer > 5)
         {
             Destroy(gameObject);
         }

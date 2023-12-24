@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: I_Battery
   m_EditorClassIdentifier: 
   itemName: "\u30D0\u30C3\u30C6\u30EA\u30FC"
+  itemInfo: "\u30D0\u30C3\u30C6\u30EA\u30FC\u3092\u5145\u96FB\u3059\u308B"
   itemImage: {fileID: 21300000, guid: 272b3d2dcbb8b94408f0e58c707167d6, type: 3}
   itemTag: 2
   quantityPerStack: 60
+  obj: {fileID: 0}

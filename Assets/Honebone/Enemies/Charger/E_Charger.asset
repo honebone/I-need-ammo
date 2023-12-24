@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da9756cacc93f54d9b5bab0eb3b4278, type: 3}
   m_Name: E_Charger
   m_EditorClassIdentifier: 
-  obj: {fileID: 7997172925299770247, guid: 4f539854892fa6148826903e3308664d, type: 3}
+  obj: {fileID: 8897353095461996695, guid: f954eacb24b779547b370fda0cd45b74, type: 3}
   enemyName: "\u30C1\u30E3\u30FC\u30B8\u30E3\u30FC"
   maxHP: 100
   DMG: 4

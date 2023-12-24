@@ -13,8 +13,8 @@ public class InfoUI : MonoBehaviour
     public void SetText(string text)
     {
         Vector3 offset=new Vector3 (0,0,-10);
-        if(Input.mousePosition.x / Camera.main.pixelWidth < 0.5f) { offset.x = 0.1f* Camera.main.pixelWidth; }
-        else { offset.x = -0.1f * Camera.main.pixelWidth; }
+        if(Input.mousePosition.x / Camera.main.pixelWidth < 0.5f) { offset.x = 0.15f* Camera.main.pixelWidth; }
+        else { offset.x = -0.15f * Camera.main.pixelWidth; }
         panel.transform.position = Input.mousePosition + offset;
        //print(Input.mousePosition);
         //print(Camera.main.ScreenToWorldPoint(offset));

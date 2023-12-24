@@ -17,6 +17,11 @@ public class DamageText : MonoBehaviour
     {
         text.text = DMG.ToString();
     }
+    public void Init_Message(string m,Color c)
+    {
+        text.text = m;
+        text.color = c;
+    }
     private void FixedUpdate()
     {
         timer += Time.deltaTime;

@@ -347,6 +347,7 @@ MonoBehaviour:
   selected: {fileID: 6845653691947890556}
   text: {fileID: 3635618518759678473}
   supplyItemIcon: {fileID: 6773490972419974448, guid: f4dabbe785a3eb443bf6ad551272e86d, type: 3}
+  supplyUpgradeIcon: {fileID: 6773490972419974448, guid: db3dd82dbae072043959483c8f82c0b8, type: 3}
   supplyItemP: {fileID: 4200910263012515794}
 --- !u!1 &7310355783284940935
 GameObject:

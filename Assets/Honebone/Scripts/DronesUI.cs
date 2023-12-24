@@ -43,6 +43,8 @@ public class DronesUI : MonoBehaviour
     [SerializeField]
     GameObject itemButton;
     [SerializeField]
+    GameObject upgradeButton;
+    [SerializeField]
     Transform itemButtonP;
 
     Drone.DroneStatus selectedDrone;
@@ -185,6 +187,10 @@ public class DronesUI : MonoBehaviour
         {
             selectedOrder.target = selectedTurret;
         }
+        foreach (ItemData item in selectedOrder.supplyItems)
+        {
+            if (item.itemTag == ItemData.ItemTag.upgrade) { @base.AddItem(item); }
+        }
         selectedOrder.supplyItems = new List<ItemData>();
         SetItemSlotsText();
 
@@ -198,14 +204,19 @@ public class DronesUI : MonoBehaviour
     {
         ResetItemButtons();
         var d = Instantiate(itemButton, itemButtonP);
-        d.GetComponent<SelectItemButton>().Init(repairData, selectedOrder, this);
+        d.GetComponent<SelectItemButton>().Init(repairData, selectedOrder, this,@base);
 
         d = Instantiate(itemButton, itemButtonP);
-        d.GetComponent<SelectItemButton>().Init(selectedTurret.turretData.ammoData, selectedOrder, this);
+        d.GetComponent<SelectItemButton>().Init(selectedTurret.turretData.ammoData, selectedOrder, this, @base);
 
         d = Instantiate(itemButton, itemButtonP);
-        d.GetComponent<SelectItemButton>().Init(batteryData, selectedOrder, this);
+        d.GetComponent<SelectItemButton>().Init(batteryData, selectedOrder, this, @base);
 
+        foreach(ItemData upgrade in @base.GetInventory())
+        {
+            d = Instantiate(upgradeButton, itemButtonP);
+            d.GetComponent<SelectItemButton>().Init(upgrade, selectedOrder, this, @base);
+        }
     }
     public void ResetItemButtons()
     {

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Base : MonoBehaviour
 {
     List<Turret> turrets;
+    List<ItemData> inventory;
     [SerializeField]
     Transform turretsP;
 
@@ -27,6 +28,7 @@ public class Base : MonoBehaviour
             drones.Add(d);
         }
         dronesUI.SetDroneButtons(drones);
+        inventory = new List<ItemData>();
     }
 
     
@@ -54,11 +56,26 @@ public class Base : MonoBehaviour
         //if (!f) { print("error"); }
         dronesUI.SetDroneButtons(drones);
     }
+    public void AddDrone(DroneData data)
+    {
+        Drone.DroneStatus newDrone = new Drone.DroneStatus();
+        newDrone.Init(data);
+        drones.Add(newDrone);
+        dronesUI.SetDroneButtons(drones);
+    }
     public void DeployTurret(TurretData turret,Vector2 pos)
     {
         var t = Instantiate(turret.obj, pos, Quaternion.identity, turretsP);
         t.GetComponent<Turret>().Init(turret);
-        logUI.AddLog(string.Format("タレットを追加：{0}", turret.turretName));
+        turrets.Add(t.GetComponent<Turret>());
+    }
+    public void AddItem(ItemData item)
+    {
+        inventory.Add(item);
+    }
+    public void RemoveItem(ItemData item)
+    {
+        inventory.Remove(item);
     }
     public List<Turret.TurretStatus> GetTurretsStatus()
     {
@@ -69,5 +86,7 @@ public class Base : MonoBehaviour
         }
         return ts;
     }
+    public List<ItemData> GetInventory() { return inventory; }
+    public List<Turret> GetTurrets() { return turrets; }
     public int GetTurretsAmount() { return turrets.Count; }
 }

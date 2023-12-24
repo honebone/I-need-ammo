@@ -24,3 +24,5 @@ MonoBehaviour:
   turretRewards:
   - turret: {fileID: 11400000, guid: 54520121b0e54e44291ab38874203d37, type: 2}
     pos: {x: 15, y: 0}
+  droneRewards: []
+  upgradeRewards: 1

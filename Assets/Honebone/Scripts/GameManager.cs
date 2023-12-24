@@ -19,11 +19,15 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     WaveData[] waves;
+    [SerializeField]
+    ItemData[] upgradeDataBase;
 
     [SerializeField]
     EnemySpawner enemySpawner;
     [SerializeField]
     WaveText waveText;
+    [SerializeField]
+    WaveClearText clearText;
     LogUI logUI;
     Base @base;
     ScoreManager scoreManager;
@@ -31,8 +35,6 @@ public class GameManager : MonoBehaviour
 
     int waveCount;
     WaveData curretWave;
-    float waveScoref;
-    // Start is called before the first frame update
     void Start()
     {
         @base = FindObjectOfType<Base>();
@@ -49,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        NextWave(waves[0]);
+        NextWave();
     }
     public void EndWave()
     {
@@ -70,16 +72,28 @@ public class GameManager : MonoBehaviour
             scoreManager.AddScore(baseScore * 0.5f, "ノンストップボーナス 50％", false);
         }
 
+        string r = "";
         foreach (TurretReward reward in curretWave.turretRewards)
         {
             @base.DeployTurret(reward.turret, reward.pos);
+            r += string.Format("タレットを追加：{0}\n", reward.turret.turretName);
         }
-        NextWave(waves[waveCount]);
+        foreach (DroneData reward in curretWave.droneRewards)
+        {
+            @base.AddDrone(reward);
+            r += string.Format("ドローンを追加：{0}\n", reward.droneName);
+        }
+        for (int i = 0; i < curretWave.upgradeRewards; i++)
+        {
+            ItemData reward = GetRandomUpgrade();
+            @base.AddItem(reward);
+            r += string.Format("アップグレードモジュールを入手：{0}\n", reward.itemName);
+        }
+        clearText.Clear(r);
     }
-    public void NextWave(WaveData w)
+    public void NextWave()
     {
-        waveScoref = 0;
-        curretWave = w;
+        curretWave = waves[waveCount];
         waveCount++;
         waveText.SetText(waveCount);
     }
@@ -95,4 +109,5 @@ public class GameManager : MonoBehaviour
     }
 
     public int GetBaseScore() { return curretWave.GetBaseScore(); }
+    public ItemData GetRandomUpgrade() { return upgradeDataBase[Random.Range(0, upgradeDataBase.Length)]; } 
 }

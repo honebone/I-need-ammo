@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spread: 10
   radius: 80
+  spawnAmount: 1
   spawnSpeed: 1
   enemySets:
   - enemy: {fileID: 11400000, guid: 54387a61319c0ab4a842e0db956742c8, type: 2}
     amount: 10
   turretRewards: []
+  droneRewards: []
+  upgradeRewards: 0

@@ -10,6 +10,8 @@ public class WaveData : ScriptableObject
     public float spawnSpeed = 1;
     public List<GameManager.EnemySet> enemySets;
     public List<GameManager.TurretReward> turretRewards;
+    public List<DroneData> droneRewards;
+    public int upgradeRewards;
 
     public int GetBaseScore()
     {

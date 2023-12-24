@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7cd96b739397d94eb69e81b33702003, type: 3}
+  m_Name: T_sniperRifle
+  m_EditorClassIdentifier: 
+  obj: {fileID: 4082590059901746876, guid: 63f1a21b358e26343a7c608a52ce1408, type: 3}
+  turretName: "\u30B9\u30CA\u30A4\u30D1\u30FC\u30E9\u30A4\u30D5\u30EB\u30BF\u30EC\u30C3\u30C8"
+  turretImage: {fileID: 21300000, guid: 994a6acbeff9d6449ba4cb3ced89872f, type: 3}
+  maxHP: 50
+  DMG: 75
+  ammoData: {fileID: 11400000, guid: 5b97c8436b173384ba36d4f69e618404, type: 2}
+  maxAmmo: 50
+  maxBattery: 120
+  range: 200
+  attackSpeed: 0.25
+  projectile: {fileID: 8900725887460578008, guid: d38beb21aaa4c9e47991573a6d90fa41, type: 3}
+  SE_GengeratePjtor: {fileID: 0}
+  SE_Fire: {fileID: 8300000, guid: 587c0f6f1b2c6264690ce5b5adadcaec, type: 3}
+  followTargetSpeed: 0
+  followCurrentTarget: 0
+  pellets: 1
+  fireRandomly: 0
+  spread: 0
+  equidistant: 0
+  projectileSpeed_min: 200
+  projectileSpeed_max: 200
+  infinitePenetration: 0
+  penetration: 5
+  projectileDuration: 2

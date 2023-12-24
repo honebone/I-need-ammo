@@ -14,6 +14,13 @@ public class SelectTurretButton : MonoBehaviour
     [SerializeField]
     Image selected;
 
+    [SerializeField]
+    Slider HPBar;
+    [SerializeField]
+    Slider ammoBar;
+    [SerializeField]
+    Slider batteryBar;
+
     DronesUI dronesUI;
     InfoUI infoUI;
     public void Init(Turret.TurretStatus s, DronesUI d)
@@ -32,18 +39,19 @@ public class SelectTurretButton : MonoBehaviour
     }
     public void ResetSelected() { selected.enabled = false; }
 
-    float timer;
     bool f;
     private void Update()
     {
         if (f)
         {
-            timer += Time.unscaledDeltaTime;
-        }
-        if (timer > .5f)
-        {
             infoUI.SetText(status.GetInfo());
         }
+        HPBar.maxValue = status.maxHP;
+        HPBar.value = status.HP;
+        ammoBar.maxValue = status.maxAmmo;
+        ammoBar.value = status.ammo;
+        batteryBar.maxValue = status.maxBattery;
+        batteryBar.value = status.battery;
     }
     public void OnMouseEnter()
     {
@@ -52,7 +60,6 @@ public class SelectTurretButton : MonoBehaviour
     public void OnMouseExit()
     {
         f = false;
-        timer = 0;
         infoUI.ResetText();
     }
 }

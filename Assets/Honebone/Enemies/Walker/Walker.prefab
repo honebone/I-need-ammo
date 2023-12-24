@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: -748409765
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0a98a150d98bb9c43b31e6911e4e1353, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 080efcb84cea27c4db05bc8b72412ece, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -103,6 +103,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageText: {fileID: 5375455229568154527, guid: 242531f060801874f9654bf3653da581, type: 3}
   blood: {fileID: 2859329404303717258, guid: 9979013b756eb704fb0ed7ceab14e295, type: 3}
+  hitSE:
+  - {fileID: 8300000, guid: abbdc91097cc9e6419b39272fa8e4986, type: 3}
+  - {fileID: 8300000, guid: d10bc01d416549740861513fab92a2aa, type: 3}
+  - {fileID: 8300000, guid: 535e51d0181a6f045b2c24d483fc015b, type: 3}
+  dieSE: {fileID: 8300000, guid: 82e74d22715cafa46a1c2af1fb52f6ae, type: 3}
   statusUI: {fileID: 5512807361038605470}
 --- !u!61 &6952482166589736668
 BoxCollider2D:
@@ -136,7 +141,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0418396, y: -0.78147185}
+  m_Offset: {x: -0.045768738, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -147,7 +152,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.4513016, y: 2.9702556}
+  m_Size: {x: 1.8784714, y: 2.9702556}
   m_EdgeRadius: 0
 --- !u!50 &1684457712037796465
 Rigidbody2D:
@@ -251,11 +256,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8427464637028124852, guid: c70953ba1ae085e48bee596bfd79b0e4, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8427464637028124852, guid: c70953ba1ae085e48bee596bfd79b0e4, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8427464637028124852, guid: c70953ba1ae085e48bee596bfd79b0e4, type: 3}
       propertyPath: m_LocalPosition.x
