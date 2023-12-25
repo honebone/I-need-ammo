@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
         curretWave = waves[waveCount];
         waveCount++;
         waveText.SetText(waveCount);
+        foreach(Turret.TurretStatus turretStatus in @base.GetTurretsStatus()) { turretStatus.ResetCounters(); }
     }
     public void StartWave()
     {

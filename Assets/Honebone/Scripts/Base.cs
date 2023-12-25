@@ -11,14 +11,20 @@ public class Base : MonoBehaviour
 
     [SerializeField]
     List<DroneData> dronesData;
-    List<Drone.DroneStatus> drones; 
+    List<Drone.DroneStatus> drones;
 
+    [SerializeField]
+    GameObject damageText;
     DronesUI dronesUI;
     LogUI logUI;
+    BaseUI baseUI;
+
+    public int HP = 500;
     void Start()
     {
         dronesUI = FindObjectOfType<DronesUI>();
         logUI = FindObjectOfType<LogUI>();
+        baseUI = FindObjectOfType<BaseUI>();
         turrets = new List<Turret>(turretsP.GetComponentsInChildren<Turret>());
         drones = new List<Drone.DroneStatus>();
         foreach(DroneData data in dronesData)
@@ -31,17 +37,28 @@ public class Base : MonoBehaviour
         inventory = new List<ItemData>();
     }
 
+    public void Damage(int DMG)
+    {
+        HP -= DMG;
+        var t = Instantiate(damageText, transform.position, Quaternion.identity);
+        t.GetComponent<DamageText>().Init(DMG);
+        baseUI.SetSliderValue();
+    }
     
     public void ReturnDrone(Drone.DroneStatus s)
     {
         s.occupied = false;
         s.orders = new List<Drone.DroneOrder>();
+        logUI.AddLog(string.Format("{0}Ç™ãAä“", s.droneData.droneName));
+
         dronesUI.SetDroneButtons(drones);
     }
     public void SendDrone(Drone.DroneStatus s)
     {
         var d = Instantiate(s.droneData.obj, transform.position, Quaternion.identity);
         d.GetComponent<Drone>().Init(s, transform);
+
+        logUI.AddLog(string.Format("{0}Ç™èoåÇ", s.droneData.droneName));
 
         s.occupied = true;
         //bool f = false;

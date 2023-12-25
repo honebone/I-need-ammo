@@ -41,8 +41,10 @@ public class SelectItemButton : MonoBehaviour
             frame.sprite = upgradeFrame;
             frame.color = Color.white;
         }
-        else { nameText.text = string.Format("{0}\nx{1}", item.itemName, item.quantityPerStack); }
-        stackText.text = string.Format("{0}スタック", order.GetItemStack(item));
+        else { 
+            nameText.text = string.Format("{0}\nx{1}", item.itemName, item.quantityPerStack);
+            stackText.text = string.Format("{0}スタック", order.GetItemStack(item));
+        }
         dronesUI = d;
         @base = b;
 
@@ -76,7 +78,8 @@ public class SelectItemButton : MonoBehaviour
     }
     public void OnChangeStack()
     {
-        stackText.text = string.Format("{0}スタック", order.GetItemStack(item));
+        if (!uprade) { stackText.text = string.Format("{0}スタック", order.GetItemStack(item)); }
+        
         if (order.GetItemStack(item) > 0) { background.color = selected; }
         else { background.color = deselected; }
         dronesUI.SetItemSlotsText();

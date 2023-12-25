@@ -95,7 +95,7 @@ public class Enemy : MonoBehaviour
         statusUI.Init(this, infoUI);
     }    
 
-    public void Damage(int DMG,Transform attackerTF)
+    public void Damage(int DMG,Transform attackerTF,bool execute)
     {
         if (CheckAlive())
         {
@@ -114,6 +114,13 @@ public class Enemy : MonoBehaviour
                 {
                     targetingTurret = true;
                     targetTransform = attackerTF;
+                }
+                if (execute)
+                {
+                    var d = Instantiate(damageText, transform.position, Quaternion.identity);
+                    d.GetComponent<DamageText>().Init_Message("即死",Color.red);
+                    status.dead = true;
+                    Die();
                 }
             }
             if (33f.Probability()) { Bleed(); }
@@ -153,6 +160,10 @@ public class Enemy : MonoBehaviour
                 if (targetingTurret)//タレットをターゲット中なら
                 {
                     targetTransform.GetComponent<Turret>().Damage(status.DMG);
+                }
+                else
+                {
+                    targetTransform.GetComponent<Base>().Damage(status.DMG);
                 }
             }
             else

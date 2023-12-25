@@ -32,11 +32,14 @@ public class Turret : MonoBehaviour
         public int ammo;
         public int battery;
 
-        public int killCount;
-        public int dealtDMG;
+        public int killCount_total;
+        public int dealtDMG_total;
+        public int killCount_wave;
+        public int dealtDMG_wave;
 
         public float doubletap;
         public int generator;
+        public int executer;
 
         public List<UpgradeModule> upgrades;
         public Turret turret;
@@ -84,14 +87,29 @@ public class Turret : MonoBehaviour
             s += string.Format("HP：{0}/{1}\n\n", HP,maxHP);
             s += string.Format("DMG：{0}\n", DMG);
             s += string.Format("攻撃速度：毎秒{0}回\n", attackSpeed);
-            s += string.Format("累計与ダメージ：{0}\n", dealtDMG);
-            s += string.Format("キル数：{0}\n", killCount);
+            s += string.Format("与ダメージ：{0}(累計{1})\n",dealtDMG_wave, dealtDMG_total);
+            s += string.Format("キル数：{0}(累計{1})\n",killCount_wave, killCount_total);
             foreach (UpgradeModule upgradeModule in upgrades)
             {
                 s += upgradeModule.GetInfo() + "\n";
             }
 
             return s;
+        }
+        public void KillConfirmed()
+        {
+            killCount_total++;
+            killCount_wave++;
+        }
+        public void AddDMGDealt(int DMG)
+        {
+            dealtDMG_total += DMG;
+            dealtDMG_wave += DMG;
+        }
+        public void ResetCounters()
+        {
+            killCount_wave = 0;
+            dealtDMG_wave = 0;
         }
     }
     [SerializeField]
@@ -107,6 +125,7 @@ public class Turret : MonoBehaviour
     GameObject damageText;
     EnemySpawner enemySpawner;
     SoundManager soundManager;
+    LogUI logUI;
 
     float timer_attack;
     bool readyFire;
@@ -123,6 +142,7 @@ public class Turret : MonoBehaviour
         Init(test);
         enemySpawner = FindObjectOfType<EnemySpawner>();
         soundManager = FindObjectOfType<SoundManager>();
+        logUI = FindObjectOfType<LogUI>();
     }
     void Update()
     {
@@ -171,6 +191,10 @@ public class Turret : MonoBehaviour
 
             GetComponent<Collider2D>().enabled = false;
             GetComponent<SpriteRenderer>().enabled = false;
+
+            logUI.AddLog(string.Format("{0}が破壊!", status.turretData.turretName));
+
+            Destroy(gameObject);
         }
     }
     IEnumerator Fire()
@@ -297,6 +321,11 @@ public class Turret : MonoBehaviour
         status.DMG_mul += value;
         status.DMG = Mathf.RoundToInt(status.turretData.DMG * (100 + status.DMG_mul) / 100f);
     }
+    public void AddAttackSpeed_mul(float value)
+    {
+        status.attackSpeed_mul += value;
+        status.attackSpeed = Mathf.RoundToInt(status.turretData.attackSpeed * (100 + status.attackSpeed_mul) / 100f);
+    }
     public void AddMaxHP_mul(float value)
     {
         status.maxHP_mul += value;
@@ -328,6 +357,10 @@ public class Turret : MonoBehaviour
     public void AddGenerator(int value)
     {
         status.generator += value;
+    }
+    public void AddExecuter(int value)
+    {
+        status.executer += value;
     }
     public Turret.TurretStatus GetTurretStatus() { return status; }
     public bool CheckAlive() { return !status.dead; }

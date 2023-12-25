@@ -86,17 +86,22 @@ public class TurretProjectile : MonoBehaviour
             {
                 hitCount++;
                 hitEnemies.Add(collision.GetInstanceID());
+                Enemy hit = collision.GetComponent<Enemy>();
+                Enemy.EnemyStatus enemyStatus = hit.GetEnemyStatus();
+                int DMG = turretStatus.DMG;
+                bool execute = false;
+                if ((enemyStatus.HP-DMG) * 1f / enemyStatus.maxHP <= turretStatus.executer / 100f) { execute = true; }
 
-                if (turretStatus.DMG >= collision.GetComponent<Enemy>().GetEnemyStatus().HP)
+                if (DMG >= enemyStatus.HP||execute)
                 {
-                    turretStatus.killCount++;
+                    turretStatus.KillConfirmed();
                     if (turretStatus.battery * 1f / turretStatus.maxBattery <= turretStatus.generator / 100f)
                     {
                         turret.SupplyBattery(1);
                     }
                 }
-                turretStatus.dealtDMG += Mathf.Min(collision.GetComponent<Enemy>().GetEnemyStatus().HP, turretStatus.DMG);
-                collision.GetComponent<Enemy>().Damage(turretStatus.DMG,turret.transform);
+                turretStatus.AddDMGDealt(Mathf.Min(enemyStatus.HP, DMG));
+                hit.Damage(DMG, turret.transform, execute);
                 if (hitCount >= turretData.penetration + 1 && !turretData.infinitePenetration)//ƒqƒbƒg”‚ªŠÑ’Ê”+1‚æ‚è‘½‚­‚È‚èA–³ŒÀ‚ÉŠÑ’Ê‚µ‚È‚¢‚È‚ç
                 {
                     if (!disabled) { DestroyPJTL(false); }

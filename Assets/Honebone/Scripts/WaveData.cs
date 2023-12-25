@@ -5,6 +5,7 @@ using UnityEngine;
 public class WaveData : ScriptableObject
 {
     public float spread;
+    public bool solidRadius;
     public float radius;
     public int spawnAmount = 1;
     public float spawnSpeed = 1;

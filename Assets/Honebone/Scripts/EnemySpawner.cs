@@ -83,7 +83,8 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemy(EnemyData data)
     {
-        float radius = Random.Range(wave.radius * 0.8f, wave.radius * 1.2f);
+        float radius = wave.radius;
+        if (!wave.solidRadius) { radius *= Random.Range(0.8f, 1.2f); }
         float angle = Random.Range(-wave.spread / 2f, wave.spread / 2f);
         Vector2 spawnPos = angle.UnitCircle() * radius;
         var e = Instantiate(data.obj, spawnPos, Quaternion.identity, transform);
