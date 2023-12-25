@@ -58,6 +58,7 @@ public class Drone : MonoBehaviour
         {
             return target != null && !target.dead && supplyItems.Count > 0 && supplyItems.Count <= itemCap;
         }
+       
     }
     [SerializeField]
     DroneStatusUI statusUI;
@@ -169,6 +170,7 @@ public class Drone : MonoBehaviour
 
         int suppliedAmount = status.orders[targetIndex].supplyItems.Count;
         scoreManager.AddScore(baseScore * 0.1f * suppliedAmount, string.Format("{0}‚Â‚ÌƒAƒCƒeƒ€‚ð•â‹‹", suppliedAmount), true);
+        FindObjectOfType<GameManager>().AddSuppliedCount(suppliedAmount);
         foreach (ItemData item in status.orders[targetIndex].supplyItems)
         {
             switch (item.itemTag)

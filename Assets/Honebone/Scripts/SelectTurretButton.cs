@@ -36,6 +36,8 @@ public class SelectTurretButton : MonoBehaviour
         dronesUI.SelectTurret(status);
         dronesUI.ResetTurretButtonsSelected();
         selected.enabled = true;
+
+        FindObjectOfType<TutorialUI>().DisplayTutorial("SelectItem");
     }
     public void ResetSelected() { selected.enabled = false; }
 

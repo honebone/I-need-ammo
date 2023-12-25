@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: W_10
   m_EditorClassIdentifier: 
   spread: 40
+  solidRadius: 0
   radius: 90
   spawnAmount: 4
   spawnSpeed: 1
@@ -24,9 +25,11 @@ MonoBehaviour:
   - enemy: {fileID: 11400000, guid: 8f8751780540bdb42858e3070863cdbc, type: 2}
     amount: 20
   - enemy: {fileID: 11400000, guid: c49ae68d172a0bf4b9b60fd418df95c6, type: 2}
-    amount: 15
+    amount: 20
   - enemy: {fileID: 11400000, guid: c3618fa54df89d442869f25dccaafc04, type: 2}
     amount: 25
-  turretRewards: []
+  turretRewards:
+  - turret: {fileID: 11400000, guid: 5908cf686b5e9d5469a8cd4cbc0679a9, type: 2}
+    pos: {x: 0, y: -15}
   droneRewards: []
-  upgradeRewards: 2
+  upgradeRewards: 3

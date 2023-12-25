@@ -41,6 +41,10 @@ public class OrderButton : MonoBehaviour
         dronesUI.ResetOrderButtonsSelected();
         selected.enabled = true;
     }
+    public void Remove()
+    {
+        dronesUI.RemoveOrder(order);
+    }
     public void SetSupplyIcons()
     {
         if(order != null)

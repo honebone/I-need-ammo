@@ -43,6 +43,10 @@ public class DebugFunctions : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Alpha5))
             {
+                FindObjectOfType<Base>().Damage(10000);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha6))
+            {
                 test.Damage(10000);
             }
         }

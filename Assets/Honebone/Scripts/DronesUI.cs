@@ -78,7 +78,7 @@ public class DronesUI : MonoBehaviour
     
     public void CheckDeployable()
     {
-        if (selectedDrone != null && selectedDrone.CheckOrders())
+        if (selectedDrone != null && selectedDrone.CheckOrders()&&selectedDrone.CountItemSlots()<=selectedDrone.droneData.itemCap)
         {
             deployable = true;
             deployText.color = Color.yellow;
@@ -147,6 +147,18 @@ public class DronesUI : MonoBehaviour
 
         CheckDeployable();
         SetTurretButtons();
+    }
+    public void RemoveOrder(Drone.DroneOrder remove)
+    {
+        selectedDrone.orders.Remove(remove);
+        selectedOrder = null;
+
+        CheckDeployable();
+        SetItemSlotsText();
+
+        SetOrderButtons();
+        ResetTurretButtons();
+        ResetItemButtons();
     }
     public void SetSupplyIcons()
     {

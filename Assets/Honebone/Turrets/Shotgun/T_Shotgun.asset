@@ -15,7 +15,7 @@ MonoBehaviour:
   obj: {fileID: 1635288887708422288, guid: 4ed77f06447dc1541a703db332f0dcf3, type: 3}
   turretName: "\u30B7\u30E7\u30C3\u30C8\u30AC\u30F3\u30BF\u30EC\u30C3\u30C8"
   turretImage: {fileID: 21300000, guid: b0386dba511479a4fbbf5b5a0cc0c15c, type: 3}
-  maxHP: 300
+  maxHP: 200
   DMG: 8
   ammoData: {fileID: 11400000, guid: de18c55cfba9a0941918457cd0877217, type: 2}
   maxAmmo: 30
@@ -31,8 +31,6 @@ MonoBehaviour:
   fireRandomly: 0
   spread: 40
   equidistant: 0
-  fireRounds: 1
-  fireRate: 0
   projectileSpeed_min: 40
   projectileSpeed_max: 50
   infinitePenetration: 0

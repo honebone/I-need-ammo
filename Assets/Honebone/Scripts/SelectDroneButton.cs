@@ -31,6 +31,7 @@ public class SelectDroneButton : MonoBehaviour
         if (!status.occupied) { dronesUI.SelectDrone(status); }//test
         else { FindObjectOfType<CameraController>().MoveTo(status.pos); }
         dronesUI.ResetDroneButtonsSelected();
+        FindObjectOfType<TutorialUI>().DisplayTutorial("AddOrder");
         selected.enabled = true;
     }
     public void ResetSelected() { selected.enabled = false; }

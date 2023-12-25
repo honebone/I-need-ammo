@@ -6,6 +6,10 @@ public class SoundManager : MonoBehaviour
 {
     [SerializeField]
     GameObject speaker;
+    [SerializeField]
+    AudioClip gameOverSE;
+    [SerializeField]
+    AudioSource BGM;
 
     List<AudioClip> playedSE;
      public void PlaySE(Vector2 pos,AudioClip SE)
@@ -21,5 +25,11 @@ public class SoundManager : MonoBehaviour
     private void FixedUpdate()
     {
         playedSE = new List<AudioClip>();
+    }
+
+    public void Gameover()
+    {
+        BGM.Stop();
+        PlaySE(Camera.main.transform.position, gameOverSE);
     }
 }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using unityroom.Api;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +21,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     WaveData[] waves;
+
+    [SerializeField]
+    WaveData endless;
     [SerializeField]
     ItemData[] upgradeDataBase;
 
@@ -28,19 +33,71 @@ public class GameManager : MonoBehaviour
     WaveText waveText;
     [SerializeField]
     WaveClearText clearText;
+    [SerializeField]
+    Image blackout;
+
+    [SerializeField]
+    GameObject gameoverUI;
+    [SerializeField]
+    Text resultText;
     LogUI logUI;
     Base @base;
     ScoreManager scoreManager;
     PauseUI pauseUI;
+    SceneLoadManager sceneLoadManager;
+    TutorialUI tutorialUI;
+    SoundManager soundManager;
+
+    int killCount;
+    int suppliedCount;
 
     int waveCount;
     WaveData curretWave;
+
     void Start()
     {
         @base = FindObjectOfType<Base>();
         logUI = FindObjectOfType<LogUI>();
         scoreManager = FindObjectOfType<ScoreManager>();
         pauseUI = FindObjectOfType<PauseUI>();
+        sceneLoadManager= FindObjectOfType<SceneLoadManager>();
+        tutorialUI= FindObjectOfType<TutorialUI>();
+        soundManager= FindObjectOfType<SoundManager>();
+
+        StartCoroutine(FadeIn());
+    }
+
+    IEnumerator FadeIn()
+    {
+        var wait = new WaitForSeconds(0.05f);
+        Color c = Color.black;
+        blackout.color = c;
+        for (int i = 0; i < 10; i++)
+        {
+            yield return wait;
+            c.a -= 0.1f;
+            blackout.color = c;
+        }
+        yield return new WaitForSeconds(1f);
+        StartGame();
+    }
+    public void EndGame()
+    {
+        StartCoroutine(FadeOut());
+    }
+    IEnumerator FadeOut()
+    {
+        var wait = new WaitForSecondsRealtime(0.05f);
+        Color c = Color.clear;
+        blackout.color = c;
+        for (int i = 0; i < 10; i++)
+        {
+            yield return wait;
+            c.a += 0.1f;
+            blackout.color = c;
+        }
+        yield return new WaitForSecondsRealtime(1f);
+        sceneLoadManager.EndGame();
     }
 
     // Update is called once per frame
@@ -93,21 +150,54 @@ public class GameManager : MonoBehaviour
     }
     public void NextWave()
     {
-        curretWave = waves[waveCount];
+        if (waveCount < 15)//15
+        {
+            curretWave = waves[waveCount];
+        }
+        else
+        {
+            curretWave = endless;
+        }
         waveCount++;
+
         waveText.SetText(waveCount);
         foreach(Turret.TurretStatus turretStatus in @base.GetTurretsStatus()) { turretStatus.ResetCounters(); }
     }
     public void StartWave()
     {
+        tutorialUI.DisplayTutorial("GameStart");
+
+        if (waveCount==2)
+        {
+            tutorialUI.DisplayTutorial("Drone");
+        }
+        if (waveCount==3)
+        {
+            tutorialUI.DisplayTutorial("Upgrade");
+        }
         pauseUI.RestFrag();
-        enemySpawner.StartWave(curretWave);
+        float mul = 0;
+        if (waveCount >= 16) { mul += 0.1f; }//16
+        enemySpawner.StartWave(curretWave,mul);
     }
-    public void TogglePause()
+    
+    public void GameOver()
     {
-        if (Time.timeScale == 1) { Time.timeScale = 0; }
-        else { Time.timeScale = 1; }
+        FindObjectOfType<CameraController>().MoveTo(@base.transform.position);
+        pauseUI.Gameover();
+        soundManager.Gameover();
+        string result = string.Format("第{0}ウェーブまで生き延びた\n",waveCount);
+        result += string.Format("最終SCORE：{0}\n", scoreManager.score);
+        result += string.Format("キル数：{0}\n",killCount);
+        result += string.Format("補給したアイテム数：{0}\n", suppliedCount);
+
+        UnityroomApiClient.Instance.SendScore(1, scoreManager.score, ScoreboardWriteMode.HighScoreDesc);
+
+        gameoverUI.SetActive(true);
+        resultText.text = result;
     }
+    public void AddKillCount() { killCount++; }
+    public void AddSuppliedCount(int amount) { suppliedCount += amount; }
 
     public int GetBaseScore() { return curretWave.GetBaseScore(); }
     public ItemData GetRandomUpgrade() { return upgradeDataBase[Random.Range(0, upgradeDataBase.Length)]; } 

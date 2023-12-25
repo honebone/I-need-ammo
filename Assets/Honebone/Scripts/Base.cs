@@ -15,9 +15,11 @@ public class Base : MonoBehaviour
 
     [SerializeField]
     GameObject damageText;
+
     DronesUI dronesUI;
     LogUI logUI;
     BaseUI baseUI;
+    GameManager gameManager;
 
     public int HP = 500;
     void Start()
@@ -25,6 +27,7 @@ public class Base : MonoBehaviour
         dronesUI = FindObjectOfType<DronesUI>();
         logUI = FindObjectOfType<LogUI>();
         baseUI = FindObjectOfType<BaseUI>();
+        gameManager = FindObjectOfType<GameManager>();
         turrets = new List<Turret>(turretsP.GetComponentsInChildren<Turret>());
         drones = new List<Drone.DroneStatus>();
         foreach(DroneData data in dronesData)
@@ -43,6 +46,10 @@ public class Base : MonoBehaviour
         var t = Instantiate(damageText, transform.position, Quaternion.identity);
         t.GetComponent<DamageText>().Init(DMG);
         baseUI.SetSliderValue();
+        if (HP <= 0)
+        {
+            gameManager.GameOver();
+        }
     }
     
     public void ReturnDrone(Drone.DroneStatus s)
@@ -85,6 +92,10 @@ public class Base : MonoBehaviour
         var t = Instantiate(turret.obj, pos, Quaternion.identity, turretsP);
         t.GetComponent<Turret>().Init(turret);
         turrets.Add(t.GetComponent<Turret>());
+    }
+    public void RemoveTurret(Turret turret)
+    {
+        turrets.Remove(turret);
     }
     public void AddItem(ItemData item)
     {

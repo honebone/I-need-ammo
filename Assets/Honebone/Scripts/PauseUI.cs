@@ -16,10 +16,11 @@ public class PauseUI : MonoBehaviour
     GameManager gameManager;
 
     bool paused;
+    bool onTutorial;
+    bool gameover;
     bool f;
     public void TogglePause()
     {
-        gameManager.TogglePause();
         if (!paused)
         {
             f = true;
@@ -31,6 +32,22 @@ public class PauseUI : MonoBehaviour
             paused = false;
             image.sprite = pause;
         }
+        SetTimescale();
+    }
+    public void SetTutorial(bool f)
+    {
+        onTutorial = f;
+        SetTimescale();
+    }
+    public void Gameover()
+    {
+        gameover = true;
+        SetTimescale();
+    }
+    public void SetTimescale()
+    {
+        if (paused || onTutorial||gameover) { Time.timeScale = 0; }
+        else { Time.timeScale = 1; }
     }
     public bool CheckPaused() { return f; }
     public void RestFrag()

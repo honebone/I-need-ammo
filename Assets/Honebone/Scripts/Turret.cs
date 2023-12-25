@@ -91,7 +91,7 @@ public class Turret : MonoBehaviour
             s += string.Format("ƒLƒ‹”F{0}(—İŒv{1})\n",killCount_wave, killCount_total);
             foreach (UpgradeModule upgradeModule in upgrades)
             {
-                s += upgradeModule.GetInfo() + "\n";
+                s += "\n" + upgradeModule.GetInfo() + "\n";
             }
 
             return s;
@@ -126,6 +126,7 @@ public class Turret : MonoBehaviour
     EnemySpawner enemySpawner;
     SoundManager soundManager;
     LogUI logUI;
+    GameManager gameManager;
 
     float timer_attack;
     bool readyFire;
@@ -142,6 +143,7 @@ public class Turret : MonoBehaviour
         Init(test);
         enemySpawner = FindObjectOfType<EnemySpawner>();
         soundManager = FindObjectOfType<SoundManager>();
+        gameManager = FindObjectOfType<GameManager>();
         logUI = FindObjectOfType<LogUI>();
     }
     void Update()
@@ -192,9 +194,11 @@ public class Turret : MonoBehaviour
             GetComponent<Collider2D>().enabled = false;
             GetComponent<SpriteRenderer>().enabled = false;
 
+            FindObjectOfType<Base>().RemoveTurret(this);
             logUI.AddLog(string.Format("{0}‚ª”j‰ó!", status.turretData.turretName));
 
-            Destroy(gameObject);
+            statusUI.gameObject.SetActive(false);
+            Destroy(gameObject,10f);
         }
     }
     IEnumerator Fire()
@@ -237,7 +241,7 @@ public class Turret : MonoBehaviour
             if (status.turretData.fireRandomly) { spread = Random.Range(-180f, 180f); }//ƒ‰ƒ“ƒ_ƒ€‚É”ò‚Î‚·‚È‚ç
 
             var pjtl = Instantiate(status.turretData.projectile, transform.position, quaternion);//pjtl‚Ì¶¬
-            pjtl.GetComponent<TurretProjectile>().Init(this, target);
+            pjtl.GetComponent<TurretProjectile>().Init(this, target,gameManager);
             pjtl.transform.Rotate(new Vector3(0, 0, 1), spread);//ŠgU•ª‰ñ“]‚³‚¹‚é
         }
 

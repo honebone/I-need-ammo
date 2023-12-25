@@ -78,7 +78,7 @@ public class Enemy : MonoBehaviour
     bool flipped;
     float timer_attack;
     bool readyAttack;
-    public void Init(Transform b,InfoUI info,EnemyData enemyData,ScoreManager score,SoundManager sound)
+    public void Init(Transform b,InfoUI info,EnemyData enemyData,ScoreManager score,SoundManager sound,float mul)
     {
         baseTF = b;
         infoUI = info;
@@ -88,6 +88,10 @@ public class Enemy : MonoBehaviour
 
         status = new EnemyStatus();
         status.Init(enemyData);
+        status.DMG = Mathf.RoundToInt(status.DMG * (1 + mul));
+        status.maxHP = Mathf.RoundToInt(status.maxHP * (1 + mul));
+        status.HP = status.maxHP;
+
         sprite = GetComponent<SpriteRenderer>();
         enemySpawner = FindObjectOfType<EnemySpawner>();//test
         targetDiff = new Vector2();
@@ -189,6 +193,7 @@ public class Enemy : MonoBehaviour
     }
     void FixedUpdate()
     {
+        if (targetTransform == null) { targetTransform = baseTF; }
         targetDiff = targetTransform.position - transform.position;
         if (targetDiff.x < 0 && !flipped)
         {
@@ -214,7 +219,7 @@ public class Enemy : MonoBehaviour
             //}
         }
 
-        if (targetingTurret && !targetTransform.GetComponent<Turret>().CheckAlive())//ターゲット中のタレットが破壊されたら、ターゲットをベースに戻す
+        if (targetingTurret && targetTransform.GetComponent<Turret>() != null&& !targetTransform.GetComponent<Turret>().CheckAlive())//ターゲット中のタレットが破壊されたら、ターゲットをベースに戻す
         {
             targetingTurret = false;
             targetTransform = baseTF;

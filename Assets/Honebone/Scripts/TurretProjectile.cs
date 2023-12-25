@@ -10,6 +10,7 @@ public class TurretProjectile : MonoBehaviour
     TurretData turretData;
     Transform tf;
     protected Enemy target;
+    GameManager gameManager;
     Transform targetTF;
     protected Vector3 targetPos;
     Vector3 targetPosDiff;
@@ -19,12 +20,13 @@ public class TurretProjectile : MonoBehaviour
     List<int> hitEnemies;
     int hitCount;
     bool disabled;
-    public void Init(Turret t, Enemy e)
+    public void Init(Turret t, Enemy e,GameManager gm)
     {
         turret = t;
         turretStatus = t.GetTurretStatus();
         turretData = turretStatus.turretData;
         target = e;
+        gameManager = gm;
         targetTF = target.GetComponent<Transform>();
         targetPos = targetTF.position;
 
@@ -94,6 +96,7 @@ public class TurretProjectile : MonoBehaviour
 
                 if (DMG >= enemyStatus.HP||execute)
                 {
+                    gameManager.AddKillCount();
                     turretStatus.KillConfirmed();
                     if (turretStatus.battery * 1f / turretStatus.maxBattery <= turretStatus.generator / 100f)
                     {

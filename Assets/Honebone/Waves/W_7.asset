@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: W_7
   m_EditorClassIdentifier: 
   spread: 35
+  solidRadius: 0
   radius: 90
   spawnAmount: 3
   spawnSpeed: 1.25
@@ -24,7 +25,7 @@ MonoBehaviour:
   - enemy: {fileID: 11400000, guid: 8f8751780540bdb42858e3070863cdbc, type: 2}
     amount: 15
   - enemy: {fileID: 11400000, guid: c49ae68d172a0bf4b9b60fd418df95c6, type: 2}
-    amount: 5
+    amount: 10
   - enemy: {fileID: 11400000, guid: c3618fa54df89d442869f25dccaafc04, type: 2}
     amount: 15
   turretRewards: []

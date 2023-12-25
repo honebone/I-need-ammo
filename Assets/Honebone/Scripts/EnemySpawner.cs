@@ -22,6 +22,8 @@ public class EnemySpawner : MonoBehaviour
 
     float timer;
 
+     float status_mul;
+
     bool waving;
     WaveData wave;
     List<GameManager.EnemySet> enemies;
@@ -71,9 +73,10 @@ public class EnemySpawner : MonoBehaviour
             }
         }
     }
-    public void StartWave(WaveData w)
+    public void StartWave(WaveData w,float mul)
     {
         wave = w;
+        status_mul = mul;
         enemies = new List<GameManager.EnemySet>(wave.enemySets);
         remaining = new List<int>();
         foreach (GameManager.EnemySet enemy in enemies) { remaining.Add(enemy.amount); }
@@ -88,7 +91,7 @@ public class EnemySpawner : MonoBehaviour
         float angle = Random.Range(-wave.spread / 2f, wave.spread / 2f);
         Vector2 spawnPos = angle.UnitCircle() * radius;
         var e = Instantiate(data.obj, spawnPos, Quaternion.identity, transform);
-        e.GetComponent<Enemy>().Init(baseTF,infoUI, data,scoreManager,soundManager);
+        e.GetComponent<Enemy>().Init(baseTF,infoUI, data,scoreManager,soundManager,status_mul);
         enemiesTF.Add(e.GetComponent<Transform>());
     }
     public void RemoveEnemyTF(Transform tf)

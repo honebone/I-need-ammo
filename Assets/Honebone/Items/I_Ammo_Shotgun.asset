@@ -16,5 +16,5 @@ MonoBehaviour:
   itemInfo: "\u30B7\u30E7\u30C3\u30C8\u30AC\u30F3\u30BF\u30EC\u30C3\u30C8\u7528\u306E\u5F3E\u85AC"
   itemImage: {fileID: 21300000, guid: ba49d10046f3358448d2ab231664e04a, type: 3}
   itemTag: 1
-  quantityPerStack: 100
+  quantityPerStack: 15
   obj: {fileID: 0}
