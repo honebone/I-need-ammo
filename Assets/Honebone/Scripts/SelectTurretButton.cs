@@ -23,13 +23,14 @@ public class SelectTurretButton : MonoBehaviour
 
     DronesUI dronesUI;
     InfoUI infoUI;
-    public void Init(Turret.TurretStatus s, DronesUI d)
+    public void Init(Turret.TurretStatus s, DronesUI d,ScrollRect sr)
     {
         status = s;
         icon.sprite = status.turretData.turretImage;
         text.text = status.turretData.turretName;
         dronesUI = d;
         infoUI = FindObjectOfType<InfoUI>();
+        scroll = sr;
     }
     public void Select()
     {
@@ -41,12 +42,20 @@ public class SelectTurretButton : MonoBehaviour
     }
     public void ResetSelected() { selected.enabled = false; }
 
+    ScrollRect scroll;
+    float wheel;
     bool f;
     private void Update()
     {
         if (f)
         {
             infoUI.SetText(status.GetInfo());
+            wheel += Input.mouseScrollDelta.y;
+            if (wheel != 0)
+            {
+                scroll.verticalNormalizedPosition += wheel * 0.1f;
+                wheel = 0;
+            }
         }
         HPBar.maxValue = status.maxHP;
         HPBar.value = status.HP;

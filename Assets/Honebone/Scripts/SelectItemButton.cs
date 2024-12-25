@@ -30,7 +30,7 @@ public class SelectItemButton : MonoBehaviour
     Drone.DroneOrder order;
     bool f;
     bool uprade;
-    public void Init(ItemData i,Drone.DroneOrder o, DronesUI d,Base b)
+    public void Init(ItemData i,Drone.DroneOrder o, DronesUI d,Base b,ScrollRect s)
     {
         item = i;
         order = o;
@@ -47,6 +47,7 @@ public class SelectItemButton : MonoBehaviour
         }
         dronesUI = d;
         @base = b;
+        scroll = s;
 
         infoUI = FindObjectOfType<InfoUI>();
 
@@ -87,12 +88,20 @@ public class SelectItemButton : MonoBehaviour
         dronesUI.SetSupplyIcons();
     }
 
+    ScrollRect scroll;
+    float wheel;
     bool p;
     private void Update()
     {
         if (p)
         {
             infoUI.SetText(item.GetInfo());
+            wheel += Input.mouseScrollDelta.y;
+            if (wheel != 0)
+            {
+                scroll.verticalNormalizedPosition += wheel*0.1f;
+                wheel = 0;
+            }
         }
     }
     public void OnMouseEnter()

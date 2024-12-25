@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
 
     int waveCount;
     WaveData curretWave;
+    float mul = 0;
 
     void Start()
     {
@@ -176,7 +177,6 @@ public class GameManager : MonoBehaviour
             tutorialUI.DisplayTutorial("Upgrade");
         }
         pauseUI.RestFrag();
-        float mul = 0;
         if (waveCount >= 16) { mul += 0.1f; }//16
         enemySpawner.StartWave(curretWave,mul);
     }

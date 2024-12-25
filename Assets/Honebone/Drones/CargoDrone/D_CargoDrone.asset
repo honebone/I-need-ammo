@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59471330bb75560439df06245204ab8b, type: 3}
   m_Name: D_CargoDrone
   m_EditorClassIdentifier: 
-  obj: {fileID: 8286397790503429840, guid: 4cc29c8dd8634954c91554204cb19970, type: 3}
+  obj: {fileID: 2699483805295720321, guid: 4cc29c8dd8634954c91554204cb19970, type: 3}
   droneName: "\u30AB\u30FC\u30B4\u30C9\u30ED\u30FC\u30F3"
   droneImage: {fileID: 21300000, guid: 6bff129cd12cfb044bb2de9b69ac4c88, type: 3}
   itemCap: 8

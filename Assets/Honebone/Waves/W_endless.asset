@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8c71d2407aa51f469273ec4dd7e7b5e, type: 3}
   m_Name: W_endless
   m_EditorClassIdentifier: 
-  spread: 90
+  spread: 135
   solidRadius: 0
   radius: 110
-  spawnAmount: 4
+  spawnAmount: 6
   spawnSpeed: 1
   enemySets:
   - enemy: {fileID: 11400000, guid: 54387a61319c0ab4a842e0db956742c8, type: 2}

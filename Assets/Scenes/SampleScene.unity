@@ -5843,6 +5843,9 @@ MonoBehaviour:
   base: {fileID: 22916003}
   ItemSlotsText: {fileID: 1327562989}
   deployText: {fileID: 2035062758}
+  scroll_Item: {fileID: 2086893178}
+  scroll_Order: {fileID: 1446692585}
+  scroll_Turret: {fileID: 1922575220}
   droneButton: {fileID: 7307028021255441487, guid: ae2dafdcd6d02ab4c8bd1a85f78cd7ad, type: 3}
   droneButtonP: {fileID: 213483609}
   newOrderButton: {fileID: 7492543710786731723, guid: 73749213c20a0ce499218da2ea49d7b4, type: 3}

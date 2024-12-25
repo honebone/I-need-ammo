@@ -14,6 +14,12 @@ public class DronesUI : MonoBehaviour
     Text ItemSlotsText;
     [SerializeField]
     Text deployText;
+    [SerializeField]
+    ScrollRect scroll_Item;
+    [SerializeField]
+    ScrollRect scroll_Order;
+    [SerializeField]
+    ScrollRect scroll_Turret;
 
     [Space(20)]
     [SerializeField]
@@ -109,7 +115,14 @@ public class DronesUI : MonoBehaviour
         //@base.SendDrone(s);
         selectedDrone = s;
 
-        selectedOrder = null;
+        if(selectedOrder != null)
+        {
+            foreach (ItemData item in selectedOrder.supplyItems)
+            {
+                if (item.itemTag == ItemData.ItemTag.upgrade) { @base.AddItem(item); }
+            }
+            selectedOrder = null;
+        }
         selectedTurret = null;
         ResetTurretButtons();
         ResetItemButtons();
@@ -124,10 +137,10 @@ public class DronesUI : MonoBehaviour
         ResetOrderButtons();
         for(int i = 0;i< selectedDrone.orders.Count; i++) { 
             var b = Instantiate(orderButton, orderButtonP);
-            b.GetComponent<OrderButton>().Init(selectedDrone.orders[i], this,selectedOrder== selectedDrone.orders[i],i);
+            b.GetComponent<OrderButton>().Init(selectedDrone.orders[i], this,selectedOrder== selectedDrone.orders[i],i,scroll_Order);
         }
         var n = Instantiate(newOrderButton, orderButtonP);
-        n.GetComponent<OrderButton>().Init(null, this, false, -999);
+        n.GetComponent<OrderButton>().Init(null, this, false, -999,scroll_Order);
     }
     public void ResetOrderButtons()
     {
@@ -151,7 +164,12 @@ public class DronesUI : MonoBehaviour
     public void RemoveOrder(Drone.DroneOrder remove)
     {
         selectedDrone.orders.Remove(remove);
+        foreach (ItemData item in remove.supplyItems)
+        {
+            if (item.itemTag == ItemData.ItemTag.upgrade) { @base.AddItem(item); }
+        }
         selectedOrder = null;
+
 
         CheckDeployable();
         SetItemSlotsText();
@@ -174,7 +192,7 @@ public class DronesUI : MonoBehaviour
         foreach (Turret.TurretStatus turret in @base.GetTurretsStatus())
         {
             var b = Instantiate(turretButton, turretButtonP);
-            b.GetComponent<SelectTurretButton>().Init(turret, this);
+            b.GetComponent<SelectTurretButton>().Init(turret, this,scroll_Turret);
         }
     }
     public void ResetTurretButtons()
@@ -216,18 +234,18 @@ public class DronesUI : MonoBehaviour
     {
         ResetItemButtons();
         var d = Instantiate(itemButton, itemButtonP);
-        d.GetComponent<SelectItemButton>().Init(repairData, selectedOrder, this,@base);
+        d.GetComponent<SelectItemButton>().Init(repairData, selectedOrder, this,@base,scroll_Item);
 
         d = Instantiate(itemButton, itemButtonP);
-        d.GetComponent<SelectItemButton>().Init(selectedTurret.turretData.ammoData, selectedOrder, this, @base);
+        d.GetComponent<SelectItemButton>().Init(selectedTurret.turretData.ammoData, selectedOrder, this, @base, scroll_Item);
 
         d = Instantiate(itemButton, itemButtonP);
-        d.GetComponent<SelectItemButton>().Init(batteryData, selectedOrder, this, @base);
+        d.GetComponent<SelectItemButton>().Init(batteryData, selectedOrder, this, @base, scroll_Item);
 
         foreach(ItemData upgrade in @base.GetInventory())
         {
             d = Instantiate(upgradeButton, itemButtonP);
-            d.GetComponent<SelectItemButton>().Init(upgrade, selectedOrder, this, @base);
+            d.GetComponent<SelectItemButton>().Init(upgrade, selectedOrder, this, @base, scroll_Item);
         }
     }
     public void ResetItemButtons()

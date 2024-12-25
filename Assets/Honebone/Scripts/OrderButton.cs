@@ -23,7 +23,7 @@ public class OrderButton : MonoBehaviour
     Transform supplyItemP;
 
     DronesUI dronesUI;
-    public void Init(Drone.DroneOrder s, DronesUI d,bool se,int index)
+    public void Init(Drone.DroneOrder s, DronesUI d,bool se,int index,ScrollRect sr)
     {
         order = s;
         if (order != null)
@@ -32,6 +32,7 @@ public class OrderButton : MonoBehaviour
             text.text = string.Format("–½—ß{0}", index + 1);
         }
         dronesUI = d;
+        scroll = sr;
         if (se) { selected.enabled = true; }
         SetSupplyIcons();
     }
@@ -68,5 +69,29 @@ public class OrderButton : MonoBehaviour
     public void ResetSelected()
     {
         selected.enabled = false;
+    }
+
+    ScrollRect scroll;
+    float wheel;
+    bool p;
+    private void Update()
+    {
+        if (p)
+        {
+            wheel += Input.mouseScrollDelta.y;
+            if (wheel != 0)
+            {
+                scroll.verticalNormalizedPosition += wheel * 0.1f;
+                wheel = 0;
+            }
+        }
+    }
+    public void OnMouseEnter()
+    {
+        p = true;
+    }
+    public void OnMouseExit()
+    {
+        p = false;
     }
 }
